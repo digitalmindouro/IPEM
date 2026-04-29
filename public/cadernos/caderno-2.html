@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Caderno P — Profissional · I.P.E.M</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #1a1713;
+    --paper: #f5f0e8;
+    --warm: #c8a96e;
+    --gold: #d4a843;
+    --accent: #8b3a2a;
+    --muted: #7a7060;
+    --light: #ede8dc;
+    --border: #d4cdbf;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ── CAPA ── */
+  .cover {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 60px 32px;
+    position: relative; background: #1a1310; overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #2e1f14 0%, #1a1310 100%);
+  }
+  .cover-texture {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(212,168,67,0.03) 60px, rgba(212,168,67,0.03) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(212,168,67,0.03) 60px, rgba(212,168,67,0.03) 61px);
+  }
+  .cover-content { position: relative; z-index: 2; max-width: 600px; }
+  .cover-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+  .cover-caderno {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(72px, 14vw, 120px); font-weight: 900;
+    color: var(--paper); line-height: 1; letter-spacing: -4px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s ease forwards;
+  }
+  .cover-caderno span { color: var(--gold); }
+  .cover-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 4vw, 30px); font-weight: 400; font-style: italic;
+    color: rgba(245,240,232,0.6); margin-top: 8px; margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s ease forwards;
+  }
+  .cover-principle {
+    font-size: 15px; color: rgba(245,240,232,0.4); font-style: italic;
+    border-top: 1px solid rgba(212,168,67,0.2); padding-top: 24px;
+    opacity: 0; animation: fadeUp 0.8s 0.9s ease forwards;
+  }
+  .cover-scroll {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(212,168,67,0.5); margin-top: 56px;
+    opacity: 0; animation: fadeUp 0.8s 1.2s ease forwards;
+  }
+  .cover-scroll::after {
+    content: ''; display: block; width: 1px; height: 36px;
+    background: var(--gold); opacity: 0.35; margin: 10px auto 0;
+    animation: pulse 2s 2s ease-in-out infinite;
+  }
+
+  /* ── NAV ── */
+  .nav-index {
+    background: #1a1310; padding: 14px 32px;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid rgba(212,168,67,0.15);
+  }
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+  }
+  .nav-pill {
+    background: transparent; border: 1px solid rgba(212,168,67,0.25);
+    color: rgba(245,240,232,0.55); padding: 5px 14px; border-radius: 100px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
+    cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
+  }
+  .nav-pill:hover { background: rgba(212,168,67,0.1); border-color: var(--gold); color: var(--gold); }
+
+  /* ── SEÇÕES ── */
+  .section {
+    max-width: 760px; margin: 0 auto;
+    padding: 80px 32px; border-bottom: 1px solid var(--border);
+  }
+  .section:last-of-type { border-bottom: none; }
+  .section-num {
+    font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 900;
+    color: rgba(212,168,67,0.12); line-height: 1; margin-bottom: -20px; letter-spacing: -3px;
+  }
+  .section-tag {
+    font-size: 10px; font-weight: 500; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 4vw, 34px); font-weight: 700;
+    color: var(--ink); line-height: 1.2; margin-bottom: 28px;
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+  .lead { font-size: 17px; line-height: 1.7; color: var(--ink); margin-bottom: 24px; font-weight: 400; }
+  .body-text { font-size: 15px; color: #3d3830; line-height: 1.8; margin-bottom: 14px; }
+  .highlight {
+    background: rgba(212,168,67,0.1); border-left: 3px solid var(--gold);
+    padding: 14px 18px; margin: 20px 0; border-radius: 0 4px 4px 0;
+    font-size: 14px; color: var(--ink); font-style: italic;
+  }
+
+  /* ── INPUTS PADRÃO ── */
+  .field-group { display: flex; flex-direction: column; gap: 2px; margin: 20px 0; }
+  .field-item {
+    background: var(--light); padding: 16px 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .field-num {
+    font-family: 'Playfair Display', serif; font-size: 22px;
+    font-weight: 700; color: rgba(212,168,67,0.5); min-width: 22px; line-height: 1.2;
+  }
+  .field-body { flex: 1; }
+  .field-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.3px; }
+  .field-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 5px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+    color: var(--ink); outline: none; transition: border-color 0.2s;
+  }
+  .field-input:focus { border-bottom-color: var(--gold); }
+  .field-input::placeholder { color: var(--border); font-style: italic; }
+  textarea.field-input { resize: none; min-height: 40px; line-height: 1.7; }
+
+  /* ── SÍNTESE BLOCK ── */
+  .sintese-block {
+    background: #1a1310; border-radius: 4px; padding: 24px 28px; margin: 24px 0; position: relative; overflow: hidden;
+  }
+  .sintese-block::before {
+    content: '➡'; font-size: 80px; color: rgba(212,168,67,0.05);
+    position: absolute; right: 16px; top: 10px; line-height: 1; pointer-events: none;
+  }
+  .sintese-label {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px; display: block;
+  }
+  .sintese-prompt {
+    font-family: 'Playfair Display', serif; font-size: 15px; font-style: italic;
+    color: rgba(245,240,232,0.5); margin-bottom: 14px;
+  }
+  .sintese-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid rgba(212,168,67,0.25); padding: 6px 0;
+    font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700;
+    color: var(--gold); outline: none; position: relative; z-index: 2;
+    transition: border-color 0.2s;
+  }
+  .sintese-input:focus { border-bottom-color: var(--gold); }
+  .sintese-input::placeholder { color: rgba(212,168,67,0.2); font-weight: 400; font-size: 15px; font-style: italic; }
+
+  /* ── PD DIAGRAM ── */
+  .pd-diagram {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin: 32px 0; flex-wrap: wrap;
+  }
+  .pd-circle {
+    width: 180px; height: 180px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 20px; position: relative;
+  }
+  .pd-circle.proposito { background: rgba(139,58,42,0.1); border: 2px solid rgba(139,58,42,0.3); margin-right: -30px; z-index: 1; }
+  .pd-circle.demanda { background: rgba(212,168,67,0.1); border: 2px solid rgba(212,168,67,0.3); margin-left: -30px; z-index: 1; }
+  .pd-circle-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .pd-circle.proposito .pd-circle-label { color: var(--accent); }
+  .pd-circle.demanda .pd-circle-label { color: #8a6a10; }
+  .pd-circle-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .pd-intersect {
+    width: 100%; text-align: center; margin-top: 20px; flex-basis: 100%;
+  }
+  .pd-intersect-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  }
+  .pd-zona-input {
+    width: 100%; max-width: 500px; background: rgba(212,168,67,0.06);
+    border: 1px solid rgba(212,168,67,0.3); border-radius: 4px; padding: 14px 18px;
+    font-family: 'Playfair Display', serif; font-size: 17px; font-style: italic; font-weight: 700;
+    color: var(--ink); outline: none; text-align: center; transition: border-color 0.2s;
+  }
+  .pd-zona-input:focus { border-color: var(--gold); }
+  .pd-zona-input::placeholder { color: var(--border); font-weight: 400; font-size: 14px; }
+
+  /* ── HABILIDADES ── */
+  .hab-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; margin: 24px 0;
+  }
+  .hab-item {
+    background: var(--light); padding: 10px 14px;
+    display: flex; gap: 10px; align-items: center;
+  }
+  .hab-num { font-size: 12px; color: var(--muted); min-width: 20px; font-weight: 500; }
+  .hab-input {
+    flex: 1; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 3px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .hab-input:focus { border-bottom-color: var(--gold); }
+  .hab-input::placeholder { color: var(--border); }
+  .hab-tag {
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 100px; padding: 2px 8px; font-size: 11px;
+    color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    user-select: none; flex-shrink: 0;
+  }
+  .hab-tag:hover { border-color: var(--ink); }
+  .hab-tag.sim { background: #f0f5ec; border-color: #4a7a35; color: #4a7a35; }
+  .hab-tag.pouco { background: #fef8ec; border-color: #8a6a10; color: #8a6a10; }
+  .hab-tag.nao { background: #f5ecea; border-color: var(--accent); color: var(--accent); }
+
+  /* ── PROBLEMA / PROMESSA ── */
+  .formula-block {
+    background: var(--light); border-radius: 4px; padding: 24px 24px; margin: 24px 0;
+  }
+  .formula-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+  }
+  .formula-row {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px;
+  }
+  .formula-word {
+    font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; color: var(--muted);
+  }
+  .formula-input-inline {
+    background: transparent; border: none; border-bottom: 2px solid var(--gold);
+    padding: 2px 6px; font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 700; color: var(--ink); outline: none;
+    min-width: 120px; transition: border-color 0.2s;
+  }
+  .formula-input-inline:focus { border-bottom-color: var(--accent); }
+  .formula-input-inline::placeholder { color: var(--border); font-weight: 400; }
+
+  .versoes-grid { display: flex; flex-direction: column; gap: 2px; margin: 20px 0; }
+  .versao-item {
+    background: var(--light); padding: 14px 20px;
+    display: flex; gap: 14px; align-items: center;
+  }
+  .versao-num {
+    font-family: 'Playfair Display', serif; font-size: 20px;
+    font-weight: 700; color: rgba(212,168,67,0.4); min-width: 20px;
+  }
+  .versao-input {
+    flex: 1; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .versao-input:focus { border-bottom-color: var(--gold); }
+  .versao-input::placeholder { color: var(--border); font-style: italic; }
+  .versao-best {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); cursor: pointer; padding: 4px 8px;
+    border: 1px solid var(--border); border-radius: 100px; transition: all 0.15s; white-space: nowrap;
+  }
+  .versao-best:hover { border-color: var(--gold); color: var(--gold); }
+  .versao-best.chosen { background: rgba(212,168,67,0.1); border-color: var(--gold); color: var(--gold); }
+
+  /* ── MINI CANVAS ── */
+  .canvas-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin: 24px 0;
+  }
+  .canvas-cell { background: var(--light); padding: 18px 18px; }
+  .canvas-cell.full { grid-column: 1 / -1; background: #1a1310; }
+  .canvas-cell-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 10px; display: block;
+  }
+  .canvas-cell.full .canvas-cell-label { color: var(--gold); }
+  .canvas-cell-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 5px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .canvas-cell-input:focus { border-bottom-color: var(--gold); }
+  .canvas-cell-input::placeholder { color: var(--border); font-style: italic; }
+  .canvas-cell.full .canvas-cell-input { color: var(--paper); border-bottom-color: rgba(212,168,67,0.2); font-size: 16px; font-weight: 500; }
+  .canvas-cell.full .canvas-cell-input::placeholder { color: rgba(245,240,232,0.2); }
+  .canvas-cell.full .canvas-cell-input:focus { border-bottom-color: var(--gold); }
+
+  /* ── MÓDULOS ENTREGA ── */
+  .modulos-list { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .modulo-item {
+    background: var(--light); padding: 18px 20px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .modulo-badge {
+    background: var(--ink); color: var(--gold);
+    font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700;
+    padding: 4px 10px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+  }
+  .modulo-body { flex: 1; }
+  .modulo-title-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--ink);
+    outline: none; transition: border-color 0.2s; margin-bottom: 8px;
+  }
+  .modulo-title-input:focus { border-bottom-color: var(--gold); }
+  .modulo-title-input::placeholder { color: var(--border); font-weight: 300; }
+  .modulo-desc-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid rgba(212,168,67,0.15); padding: 3px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--muted);
+    outline: none; resize: none; line-height: 1.6; transition: border-color 0.2s;
+  }
+  .modulo-desc-input:focus { border-bottom-color: var(--gold); }
+  .modulo-desc-input::placeholder { color: var(--border); font-style: italic; }
+
+  /* ── VALIDAÇÃO CONTATOS ── */
+  .contatos-wrap { margin: 24px 0; }
+  .contatos-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-bottom: 2px;
+  }
+  .contato-item {
+    background: var(--light); padding: 10px 12px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .contato-num { font-size: 11px; color: var(--muted); min-width: 16px; }
+  .contato-input {
+    flex: 1; background: transparent; border: none; min-width: 0;
+    border-bottom: 1px solid var(--border); padding: 2px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink); outline: none;
+    transition: border-color 0.2s;
+  }
+  .contato-input:focus { border-bottom-color: var(--gold); }
+  .contato-input::placeholder { color: var(--border); }
+  .contato-status {
+    font-size: 13px; cursor: pointer; user-select: none; flex-shrink: 0;
+  }
+
+  .mensagem-modelo {
+    background: #1a1310; border-radius: 4px; padding: 22px 26px; margin: 20px 0; position: relative; overflow: hidden;
+  }
+  .mensagem-modelo::before {
+    content: '"'; font-family: 'Playfair Display', serif; font-size: 100px;
+    color: rgba(212,168,67,0.06); position: absolute; top: -10px; left: 14px; line-height: 1;
+  }
+  .mensagem-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block;
+  }
+  .mensagem-modelo p { font-size: 14px; color: rgba(245,240,232,0.75); line-height: 1.8; position: relative; z-index: 2; font-style: italic; }
+
+  .respostas-track {
+    display: flex; gap: 2px; margin: 20px 0;
+  }
+  .resp-card {
+    flex: 1; padding: 16px 14px; text-align: center;
+  }
+  .resp-card.sim { background: #f0f5ec; }
+  .resp-card.talvez { background: #fef8ec; }
+  .resp-card.nao { background: #f5ecea; }
+  .resp-icon { font-size: 18px; margin-bottom: 4px; }
+  .resp-label {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .resp-card.sim .resp-label { color: #4a7a35; }
+  .resp-card.talvez .resp-label { color: #8a6a10; }
+  .resp-card.nao .resp-label { color: var(--accent); }
+  .resp-count {
+    font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+    cursor: pointer; user-select: none; transition: transform 0.1s;
+  }
+  .resp-card.sim .resp-count { color: #4a7a35; }
+  .resp-card.talvez .resp-count { color: #8a6a10; }
+  .resp-card.nao .resp-count { color: var(--accent); }
+  .resp-btns { display: flex; gap: 4px; justify-content: center; margin-top: 6px; }
+  .resp-btn {
+    background: transparent; border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 100px; width: 24px; height: 24px;
+    font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .resp-btn:hover { background: rgba(0,0,0,0.06); }
+
+  /* ── PREÇOS ── */
+  .preco-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; margin: 24px 0; }
+  .preco-card { padding: 24px 18px; text-align: center; }
+  .preco-card.teste { background: var(--light); }
+  .preco-card.padrao { background: var(--ink); }
+  .preco-card.premium { background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.3); }
+  .preco-tier {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .preco-card.teste .preco-tier { color: var(--muted); }
+  .preco-card.padrao .preco-tier { color: rgba(245,240,232,0.5); }
+  .preco-card.premium .preco-tier { color: var(--gold); }
+  .preco-symbol {
+    font-size: 13px; vertical-align: top; margin-top: 6px; display: inline-block;
+  }
+  .preco-card.teste .preco-symbol { color: var(--muted); }
+  .preco-card.padrao .preco-symbol { color: rgba(245,240,232,0.5); }
+  .preco-card.premium .preco-symbol { color: var(--gold); }
+  .preco-input {
+    background: transparent; border: none; border-bottom: 2px solid var(--border);
+    font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+    text-align: center; outline: none; width: 120px; transition: border-color 0.2s;
+  }
+  .preco-card.teste .preco-input { color: var(--ink); }
+  .preco-card.padrao .preco-input { color: var(--paper); border-bottom-color: rgba(245,240,232,0.2); }
+  .preco-card.padrao .preco-input:focus { border-bottom-color: var(--gold); }
+  .preco-card.premium .preco-input { color: var(--ink); border-bottom-color: rgba(212,168,67,0.3); }
+  .preco-input:focus { border-bottom-color: var(--gold); }
+  .preco-desc { font-size: 12px; margin-top: 8px; }
+  .preco-card.teste .preco-desc { color: var(--muted); }
+  .preco-card.padrao .preco-desc { color: rgba(245,240,232,0.4); }
+  .preco-card.premium .preco-desc { color: #8a6a10; }
+
+  /* ── CHECKPOINT ── */
+  .checkpoint-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin: 24px 0; }
+  .check-item {
+    background: var(--light); padding: 20px;
+    display: flex; gap: 14px; align-items: center; cursor: pointer;
+    transition: background 0.2s; user-select: none;
+  }
+  .check-item:hover { background: #e6e0d4; }
+  .check-item.yes { background: #f0f5ec; }
+  .check-indicator {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0; transition: all 0.2s; background: white;
+  }
+  .check-item.yes .check-indicator { background: #4a7a35; border-color: #4a7a35; color: white; }
+  .check-body strong { display: block; font-size: 14px; font-weight: 500; color: var(--ink); }
+  .check-body span { font-size: 12px; color: var(--muted); }
+  .check-result {
+    background: var(--ink); padding: 16px 20px; margin-top: 2px; border-radius: 0 0 4px 4px;
+    text-align: center; display: none;
+  }
+  .check-result.show { display: block; }
+  .check-result p { font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; color: var(--gold); }
+
+  /* ── EVIDÊNCIAS ── */
+  .evidencias-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; margin: 24px 0; }
+  .ev-card { background: var(--light); padding: 18px; display: flex; gap: 12px; align-items: flex-start; }
+  .ev-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .ev-body strong { display: block; font-size: 12px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .ev-textarea {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 3px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300;
+    color: var(--ink); outline: none; resize: none; min-height: 36px; line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+  .ev-textarea:focus { border-bottom-color: var(--gold); }
+  .ev-textarea::placeholder { color: var(--border); font-style: italic; }
+
+  /* ── FINAL ── */
+  .final-section { background: #1a1310; padding: 80px 32px; text-align: center; }
+  .final-inner { max-width: 600px; margin: 0 auto; }
+  .final-tag { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; }
+  .final-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3.5vw, 28px); font-weight: 400; font-style: italic;
+    color: var(--paper); line-height: 1.5;
+  }
+  .final-quote strong { font-style: normal; font-weight: 700; color: var(--gold); }
+  .final-sub { font-size: 12px; color: rgba(245,240,232,0.25); margin-top: 40px; letter-spacing: 2px; }
+  .cover-line { width: 60px; height: 1px; background: rgba(212,168,67,0.25); margin: 36px auto 0; }
+
+  /* ── ANIMAÇÕES ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%,100%{opacity:0.35} 50%{opacity:0.8} }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    .canvas-grid, .preco-grid, .checkpoint-grid, .hab-grid { grid-template-columns: 1fr; }
+    .contatos-grid { grid-template-columns: repeat(2, 1fr); }
+    .evidencias-grid { grid-template-columns: 1fr; }
+    .nav-index { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<section class="cover">
+  <div class="cover-texture"></div>
+  <div class="cover-content">
+    <p class="cover-label">Caderno 2 · I.P.E.M · Ordenismo</p>
+    <h1 class="cover-caderno"><span>P</span>.</h1>
+    <p class="cover-name">Profissional</p>
+    <p class="cover-principle">"Trabalhar com o que ama é bom. Viver disso é melhor."</p>
+    <p class="cover-scroll">Comece aqui</p>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="nav-index">
+  <div class="nav-inner">
+    <a class="nav-pill" href="#p00">P-00 PD</a>
+    <a class="nav-pill" href="#p01">P-01 Habilidades</a>
+    <a class="nav-pill" href="#p02">P-02 Problema</a>
+    <a class="nav-pill" href="#p03">P-03 Promessa</a>
+    <a class="nav-pill" href="#p04">P-04 Canvas</a>
+    <a class="nav-pill" href="#p05">P-05 Entrega</a>
+    <a class="nav-pill" href="#p06">P-06 Validação</a>
+    <a class="nav-pill" href="#p07">P-07 Preço</a>
+    <a class="nav-pill" href="#checkpoint">Checkpoint</a>
+    <a class="nav-pill" href="#evidencias">Evidências</a>
+  </div>
+</nav>
+
+<!-- P-00 PROPÓSITO & DEMANDA -->
+<section class="section reveal" id="p00">
+  <div class="section-num">P-00</div>
+  <p class="section-tag">Mapa da Vocação Viável</p>
+  <h2 class="section-title">Propósito & Demanda.<br><em>O que você ama + o que o mundo paga.</em></h2>
+  <p class="lead">A maioria das pessoas escolhe um caminho só pelo dinheiro ou só pela paixão. Os dois sem se encontrar viram frustração. Aqui você encontra a interseção.</p>
+
+  <!-- Bloco A -->
+  <p class="section-tag" style="margin-bottom:12px">Bloco A — Propósito</p>
+  <div class="field-group">
+    <div class="field-item">
+      <div class="field-num">1</div>
+      <div class="field-body">
+        <p class="field-label">O que eu faço e perco a noção do tempo?</p>
+        <input class="field-input" type="text" placeholder="Seja específico..."/>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">2</div>
+      <div class="field-body">
+        <p class="field-label">Em que eu sou naturalmente bom?</p>
+        <input class="field-input" type="text" placeholder=""/>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">3</div>
+      <div class="field-body">
+        <p class="field-label">O que as pessoas sempre me pedem ajuda?</p>
+        <input class="field-input" type="text" placeholder=""/>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">4</div>
+      <div class="field-body">
+        <p class="field-label">Que tipo de problema eu gosto de resolver?</p>
+        <input class="field-input" type="text" placeholder=""/>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">5</div>
+      <div class="field-body">
+        <p class="field-label">Sobre o que eu estudo por vontade própria?</p>
+        <input class="field-input" type="text" placeholder=""/>
+      </div>
+    </div>
+  </div>
+  <div class="sintese-block">
+    <span class="sintese-label">Síntese — Propósito</span>
+    <p class="sintese-prompt">Meu propósito gira em torno de...</p>
+    <input class="sintese-input" type="text" placeholder="Escreva sua síntese aqui..."/>
+  </div>
+
+  <!-- Bloco B -->
+  <p class="section-tag" style="margin-top:40px;margin-bottom:12px">Bloco B — Demanda</p>
+  <div class="field-group">
+    <div class="field-item">
+      <div class="field-num">1</div>
+      <div class="field-body">
+        <p class="field-label">Quem sofre com isso hoje?</p>
+        <input class="field-input" type="text" placeholder="Seja específico sobre o perfil..."/>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">2</div>
+      <div class="field-body">
+        <p class="field-label">Essas pessoas pagam por ajuda?</p>
+        <input class="field-input" type="text" placeholder="Sim / Não / Às vezes — explique..."/>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">3</div>
+      <div class="field-body">
+        <p class="field-label">Onde elas estão?</p>
+        <input class="field-input" type="text" placeholder="Instagram, YouTube, grupos, etc..."/>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">4</div>
+      <div class="field-body">
+        <p class="field-label">Já existe alguém vendendo isso?</p>
+        <input class="field-input" type="text" placeholder="Quem? Como?"/>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">5</div>
+      <div class="field-body">
+        <p class="field-label">Por que pagariam para mim especificamente?</p>
+        <input class="field-input" type="text" placeholder="Sua vantagem real..."/>
+      </div>
+    </div>
+  </div>
+  <div class="sintese-block">
+    <span class="sintese-label">Síntese — Demanda</span>
+    <p class="sintese-prompt">Existe demanda porque...</p>
+    <input class="sintese-input" type="text" placeholder="Escreva sua síntese aqui..."/>
+  </div>
+
+  <!-- Bloco C Interseção -->
+  <p class="section-tag" style="margin-top:40px;margin-bottom:16px">Bloco C — Interseção PD</p>
+  <div class="pd-diagram">
+    <div class="pd-circle proposito">
+      <div class="pd-circle-label">Propósito</div>
+      <div class="pd-circle-text">O que vem de dentro. O que você faz com naturalidade.</div>
+    </div>
+    <div class="pd-circle demanda">
+      <div class="pd-circle-label">Demanda</div>
+      <div class="pd-circle-text">O que o mundo paga. O que alguém precisa.</div>
+    </div>
+    <div class="pd-intersect">
+      <p class="pd-intersect-label">Minha Zona PD é:</p>
+      <input class="pd-zona-input" type="text" placeholder="Onde os dois se encontram..."/>
+    </div>
+  </div>
+  <div class="highlight">
+    Se você não consegue escrever uma frase clara aqui — volte. Sem a Zona PD definida, o resto não avança.
+  </div>
+</section>
+
+<!-- P-01 HABILIDADES -->
+<section class="section reveal" id="p01">
+  <div class="section-num">P-01</div>
+  <p class="section-tag">O que em você serve para isso</p>
+  <h2 class="section-title">Inventário de Habilidades.<br><em>Seus recursos reais.</em></h2>
+  <p class="lead">Liste 20 coisas que você sabe fazer. Depois classifique cada uma. O foco vai nas que ajudam diretamente na sua Zona PD.</p>
+
+  <div class="hab-grid" id="hab-grid"></div>
+
+  <div class="highlight" style="margin-top:24px">
+    Foque nas <strong>✔</strong> — elas são o seu arsenal real. As ❌ não são fraquezas, só não servem para agora.
+  </div>
+</section>
+
+<!-- P-02 PROBLEMA -->
+<section class="section reveal" id="p02">
+  <div class="section-num">P-02</div>
+  <p class="section-tag">A Dor Central</p>
+  <h2 class="section-title">Definição do Problema.<br><em>Quem você ajuda e com o quê.</em></h2>
+  <p class="lead">Produto sem problema claro é produto sem comprador. Complete a fórmula abaixo em 3 versões — depois escolha a melhor.</p>
+
+  <div class="formula-block">
+    <p class="formula-label">Fórmula base</p>
+    <div class="formula-row">
+      <span class="formula-word">Eu ajudo</span>
+      <input class="formula-input-inline" id="prob-quem" type="text" placeholder="quem?" style="width:140px"/>
+      <span class="formula-word">a resolver</span>
+      <input class="formula-input-inline" id="prob-oque" type="text" placeholder="o quê?" style="width:160px"/>
+      <span class="formula-word">para</span>
+      <input class="formula-input-inline" id="prob-para" type="text" placeholder="resultado?" style="width:160px"/>
+    </div>
+  </div>
+
+  <p class="section-tag" style="margin-top:28px;margin-bottom:12px">3 Versões — escolha a melhor</p>
+  <div class="versoes-grid">
+    <div class="versao-item">
+      <div class="versao-num">1</div>
+      <input class="versao-input" type="text" placeholder="Primeira versão da sua proposta..."/>
+      <span class="versao-best" onclick="escolherMelhor(this)">Melhor</span>
+    </div>
+    <div class="versao-item">
+      <div class="versao-num">2</div>
+      <input class="versao-input" type="text" placeholder="Segunda versão..."/>
+      <span class="versao-best" onclick="escolherMelhor(this)">Melhor</span>
+    </div>
+    <div class="versao-item">
+      <div class="versao-num">3</div>
+      <input class="versao-input" type="text" placeholder="Terceira versão..."/>
+      <span class="versao-best" onclick="escolherMelhor(this)">Melhor</span>
+    </div>
+  </div>
+</section>
+
+<!-- P-03 PROMESSA -->
+<section class="section reveal" id="p03">
+  <div class="section-num">P-03</div>
+  <p class="section-tag">O Resultado</p>
+  <h2 class="section-title">Promessa Essencial.<br><em>O que você entrega de verdade.</em></h2>
+  <p class="lead">A promessa não é o que você faz — é o que a pessoa conquista. Tem que ser real e específica. Não prometa o que não pode entregar.</p>
+
+  <div class="formula-block">
+    <p class="formula-label">Modelo da promessa</p>
+    <div class="formula-row" style="flex-wrap:wrap; gap:10px">
+      <span class="formula-word">Em</span>
+      <input class="formula-input-inline" type="text" placeholder="X semanas" style="width:110px"/>
+      <span class="formula-word">, você vai</span>
+      <input class="formula-input-inline" type="text" placeholder="resultado concreto" style="width:200px"/>
+      <span class="formula-word">sem</span>
+      <input class="formula-input-inline" type="text" placeholder="obstáculo comum" style="width:180px"/>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Critério: real + específico. Se você não pode garantir — reescreva até poder.
+  </div>
+</section>
+
+<!-- P-04 MINI CANVAS -->
+<section class="section reveal" id="p04">
+  <div class="section-num">P-04</div>
+  <p class="section-tag">Mapa do Produto</p>
+  <h2 class="section-title">Mini Canvas I.P.E.M.<br><em>Seu produto em uma página.</em></h2>
+  <p class="lead">Preencha os sete campos. Se algum estiver em branco, você ainda não tem um produto — tem uma ideia.</p>
+
+  <div class="canvas-grid">
+    <div class="canvas-cell full">
+      <span class="canvas-cell-label">Nome do Produto</span>
+      <input class="canvas-cell-input" type="text" placeholder="Como se chama o que você está criando?"/>
+    </div>
+    <div class="canvas-cell">
+      <span class="canvas-cell-label">1. Público</span>
+      <input class="canvas-cell-input" type="text" placeholder="Quem exatamente?"/>
+    </div>
+    <div class="canvas-cell">
+      <span class="canvas-cell-label">2. Dor</span>
+      <input class="canvas-cell-input" type="text" placeholder="Qual o problema central?"/>
+    </div>
+    <div class="canvas-cell">
+      <span class="canvas-cell-label">3. Solução</span>
+      <input class="canvas-cell-input" type="text" placeholder="Como você resolve?"/>
+    </div>
+    <div class="canvas-cell">
+      <span class="canvas-cell-label">4. Diferencial</span>
+      <input class="canvas-cell-input" type="text" placeholder="Por que você e não outro?"/>
+    </div>
+    <div class="canvas-cell">
+      <span class="canvas-cell-label">5. Formato</span>
+      <input class="canvas-cell-input" type="text" placeholder="Online, presencial, grupo..."/>
+    </div>
+    <div class="canvas-cell">
+      <span class="canvas-cell-label">6. Preço</span>
+      <input class="canvas-cell-input" type="text" placeholder="R$"/>
+    </div>
+    <div class="canvas-cell">
+      <span class="canvas-cell-label">7. Canal</span>
+      <input class="canvas-cell-input" type="text" placeholder="Onde você vai vender?"/>
+    </div>
+  </div>
+</section>
+
+<!-- P-05 ENTREGA -->
+<section class="section reveal" id="p05">
+  <div class="section-num">P-05</div>
+  <p class="section-tag">Como você vai ajudar</p>
+  <h2 class="section-title">Estrutura de Entrega.<br><em>Divida em módulos. Torne real.</em></h2>
+  <p class="lead">Produto sem estrutura de entrega é promessa sem caminho. Quebre em módulos — do diagnóstico à execução.</p>
+
+  <div class="modulos-list" id="modulos-list"></div>
+  <button onclick="addModulo()" style="margin-top:2px;width:100%;padding:14px;background:var(--light);border:none;border-top:2px dashed var(--border);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#e6e0d4'" onmouseout="this.style.background='var(--light)'">+ Adicionar módulo</button>
+</section>
+
+<!-- P-06 VALIDAÇÃO -->
+<section class="section reveal" id="p06">
+  <div class="section-num">P-06</div>
+  <p class="section-tag">Teste Real</p>
+  <h2 class="section-title">Validação.<br><em>Antes de construir, confirme que existe.</em></h2>
+  <p class="lead">Produto não validado é aposta. Liste 20 contatos, fale com 5, mostre a ideia e registre as respostas. Só depois de validar você avança.</p>
+
+  <div class="contatos-wrap">
+    <div class="contatos-grid" id="contatos-grid"></div>
+  </div>
+
+  <div class="mensagem-modelo">
+    <span class="mensagem-label">Mensagem modelo</span>
+    <p>"Oi, estou criando um programa para ajudar [perfil] a [resultado]. Você teria interesse ou conhece alguém que teria?"</p>
+  </div>
+
+  <p class="section-tag" style="margin-top:32px;margin-bottom:12px">Contador de Respostas</p>
+  <div class="respostas-track">
+    <div class="resp-card sim">
+      <div class="resp-icon">✔</div>
+      <div class="resp-label">Sim</div>
+      <div class="resp-count" id="cnt-sim">0</div>
+      <div class="resp-btns">
+        <button class="resp-btn" onclick="changeCount('sim',1)">+</button>
+        <button class="resp-btn" onclick="changeCount('sim',-1)">−</button>
+      </div>
+    </div>
+    <div class="resp-card talvez">
+      <div class="resp-icon">⚠️</div>
+      <div class="resp-label">Talvez</div>
+      <div class="resp-count" id="cnt-talvez">0</div>
+      <div class="resp-btns">
+        <button class="resp-btn" onclick="changeCount('talvez',1)">+</button>
+        <button class="resp-btn" onclick="changeCount('talvez',-1)">−</button>
+      </div>
+    </div>
+    <div class="resp-card nao">
+      <div class="resp-icon">❌</div>
+      <div class="resp-label">Não</div>
+      <div class="resp-count" id="cnt-nao">0</div>
+      <div class="resp-btns">
+        <button class="resp-btn" onclick="changeCount('nao',1)">+</button>
+        <button class="resp-btn" onclick="changeCount('nao',-1)">−</button>
+      </div>
+    </div>
+  </div>
+  <div class="highlight" id="validacao-feedback" style="display:none"></div>
+</section>
+
+<!-- P-07 PREÇO -->
+<section class="section reveal" id="p07">
+  <div class="section-num">P-07</div>
+  <p class="section-tag">Valor</p>
+  <h2 class="section-title">Preço & Posicionamento.<br><em>Defina. Teste. Ajuste.</em></h2>
+  <p class="lead">Preço não é um número fixo — é uma hipótese que você testa. Comece pelo teste, valide com o mercado, ajuste conforme o retorno.</p>
+
+  <div class="preco-grid">
+    <div class="preco-card teste">
+      <div class="preco-tier">Teste</div>
+      <div><span class="preco-symbol">R$</span><input class="preco-input" type="text" value="197"/></div>
+      <div class="preco-desc">Para validar com os primeiros</div>
+    </div>
+    <div class="preco-card padrao">
+      <div class="preco-tier">Padrão</div>
+      <div><span class="preco-symbol">R$</span><input class="preco-input" type="text" value="297"/></div>
+      <div class="preco-desc">Após primeira validação</div>
+    </div>
+    <div class="preco-card premium">
+      <div class="preco-tier">Premium</div>
+      <div><span class="preco-symbol">R$</span><input class="preco-input" type="text" value="497"/></div>
+      <div class="preco-desc">Após prova social real</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKPOINT -->
+<section class="section reveal" id="checkpoint">
+  <div class="section-num">✓</div>
+  <p class="section-tag">Antes de avançar</p>
+  <h2 class="section-title">Checkpoint Profissional.<br><em>3 "sim" para avançar.</em></h2>
+  <p class="lead">Não é burocracia — é o método te protegendo de avançar no vazio. Clique em cada item quando for real.</p>
+
+  <div class="checkpoint-grid" id="checkpoint-grid">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-indicator">—</div>
+      <div class="check-body">
+        <strong>Produto existe?</strong>
+        <span>Está estruturado e documentado</span>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-indicator">—</div>
+      <div class="check-body">
+        <strong>Alguém pagou?</strong>
+        <span>Pelo menos uma venda real</span>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-indicator">—</div>
+      <div class="check-body">
+        <strong>Entreguei?</strong>
+        <span>O produto foi entregue de verdade</span>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-indicator">—</div>
+      <div class="check-body">
+        <strong>Funcionou?</strong>
+        <span>O cliente teve resultado</span>
+      </div>
+    </div>
+  </div>
+  <div class="check-result" id="check-result">
+    <p id="check-result-text"></p>
+  </div>
+</section>
+
+<!-- EVIDÊNCIAS -->
+<section class="section reveal" id="evidencias">
+  <div class="section-num">E</div>
+  <p class="section-tag">Prova de Execução</p>
+  <h2 class="section-title">Evidências.<br><em>Prova supera opinião.</em></h2>
+  <p class="lead">O Caderno P só está concluído com evidências reais. Registre abaixo o que comprova que você construiu e entregou.</p>
+
+  <div class="evidencias-grid">
+    <div class="ev-card">
+      <div class="ev-icon">💳</div>
+      <div class="ev-body">
+        <strong>Pagamentos</strong>
+        <textarea class="ev-textarea" placeholder="Prints de vendas, transferências..."></textarea>
+      </div>
+    </div>
+    <div class="ev-card">
+      <div class="ev-icon">💬</div>
+      <div class="ev-body">
+        <strong>Depoimentos</strong>
+        <textarea class="ev-textarea" placeholder="Prints, áudios, mensagens de clientes..."></textarea>
+      </div>
+    </div>
+    <div class="ev-card">
+      <div class="ev-icon">📸</div>
+      <div class="ev-body">
+        <strong>Fotos / Prints</strong>
+        <textarea class="ev-textarea" placeholder="Registros visuais da entrega..."></textarea>
+      </div>
+    </div>
+    <div class="ev-card">
+      <div class="ev-icon">📊</div>
+      <div class="ev-body">
+        <strong>Resultados</strong>
+        <textarea class="ev-textarea" placeholder="Números, métricas, transformações..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final-section reveal">
+  <div class="final-inner">
+    <p class="final-tag">Caderno P — Concluído</p>
+    <p class="final-quote">
+      "Trabalhar com o que ama é bom.<br>
+      <strong>Viver disso é melhor."</strong>
+    </p>
+    <div class="cover-line"></div>
+    <p class="final-sub">I.P.E.M · Caderno P · Profissional · Ordenismo</p>
+  </div>
+</section>
+
+<script>
+/* ── HABILIDADES ── */
+const habGrid = document.getElementById('hab-grid');
+for (let i = 1; i <= 20; i++) {
+  const div = document.createElement('div');
+  div.className = 'hab-item';
+  div.innerHTML = `
+    <span class="hab-num">${i}.</span>
+    <input class="hab-input" type="text" placeholder="Habilidade ${i}..."/>
+    <span class="hab-tag" onclick="cycleTag(this)">—</span>
+  `;
+  habGrid.appendChild(div);
+}
+
+function cycleTag(el) {
+  const states = ['—','✔','⚠️','❌'];
+  const classes = ['','sim','pouco','nao'];
+  const idx = states.indexOf(el.textContent.trim());
+  const next = (idx + 1) % states.length;
+  el.textContent = states[next];
+  el.className = 'hab-tag ' + classes[next];
+}
+
+/* ── MÓDULOS ── */
+let moduloCount = 0;
+function addModulo() {
+  moduloCount++;
+  const list = document.getElementById('modulos-list');
+  const div = document.createElement('div');
+  div.className = 'modulo-item';
+  div.innerHTML = `
+    <div class="modulo-badge">M${moduloCount}</div>
+    <div class="modulo-body">
+      <input class="modulo-title-input" type="text" placeholder="Nome do módulo..."/>
+      <textarea class="modulo-desc-input" placeholder="O que será trabalhado neste módulo..." rows="2"></textarea>
+    </div>
+  `;
+  list.appendChild(div);
+}
+addModulo(); addModulo(); addModulo();
+
+/* ── CONTATOS ── */
+const contGrid = document.getElementById('contatos-grid');
+const statuses = ['—','✔','⚠️','❌'];
+for (let i = 1; i <= 20; i++) {
+  const div = document.createElement('div');
+  div.className = 'contato-item';
+  div.innerHTML = `
+    <span class="contato-num">${i}.</span>
+    <input class="contato-input" type="text" placeholder="Nome..."/>
+    <span class="contato-status" onclick="cycleStatus(this)">—</span>
+  `;
+  contGrid.appendChild(div);
+}
+function cycleStatus(el) {
+  const idx = statuses.indexOf(el.textContent.trim());
+  el.textContent = statuses[(idx + 1) % statuses.length];
+}
+
+/* ── CONTADOR RESPOSTAS ── */
+const counts = { sim: 0, talvez: 0, nao: 0 };
+function changeCount(type, delta) {
+  counts[type] = Math.max(0, counts[type] + delta);
+  document.getElementById('cnt-' + type).textContent = counts[type];
+  const fb = document.getElementById('validacao-feedback');
+  const total = counts.sim + counts.talvez + counts.nao;
+  if (total > 0) {
+    fb.style.display = 'block';
+    if (counts.nao === total) {
+      fb.textContent = 'Só respostas negativas — volte para P-00 e reveja a Zona PD.';
+    } else if (counts.sim >= 3) {
+      fb.textContent = `${counts.sim} interesse(s) confirmado(s). Você pode avançar para estruturar a entrega.`;
+    } else {
+      fb.textContent = `Continue conversando. Você precisa de pelo menos 3 "Sim" antes de avançar.`;
+    }
+  }
+}
+
+/* ── VERSÃO MELHOR ── */
+function escolherMelhor(el) {
+  document.querySelectorAll('.versao-best').forEach(b => b.classList.remove('chosen'));
+  el.classList.add('chosen');
+}
+
+/* ── CHECKPOINT ── */
+function toggleCheck(el) {
+  el.classList.toggle('yes');
+  const ind = el.querySelector('.check-indicator');
+  ind.textContent = el.classList.contains('yes') ? '✔' : '—';
+  const checked = document.querySelectorAll('.check-item.yes').length;
+  const result = document.getElementById('check-result');
+  const txt = document.getElementById('check-result-text');
+  result.classList.add('show');
+  if (checked >= 3) {
+    txt.textContent = checked === 4
+      ? 'Perfeito. Caderno P concluído. Você pode avançar para o Caderno E.'
+      : '3 confirmações — você está liberado para avançar.';
+  } else {
+    txt.textContent = `${checked} de 4. Continue executando antes de avançar.`;
+  }
+}
+
+/* ── REVEAL ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

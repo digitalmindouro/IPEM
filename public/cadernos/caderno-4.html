@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Caderno M — Movimento · I.P.E.M</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #1a1713;
+    --paper: #f5f0e8;
+    --warm: #c8a96e;
+    --gold: #d4a843;
+    --accent: #8b3a2a;
+    --muted: #7a7060;
+    --light: #ede8dc;
+    --border: #d4cdbf;
+    --blue: #2a4a6b;
+    --blue-mid: #4a7aab;
+    --blue-light: #edf2f8;
+    --blue-glow: #b8cfe8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'DM Sans', sans-serif; font-weight: 300;
+    line-height: 1.75; overflow-x: hidden;
+  }
+
+  /* ── CAPA ── */
+  .cover {
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 60px 32px;
+    position: relative; background: #111520; overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #1a2235 0%, #111520 100%);
+  }
+  .cover-texture {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(42,74,107,0.04) 60px, rgba(42,74,107,0.04) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(42,74,107,0.04) 60px, rgba(42,74,107,0.04) 61px);
+  }
+  .cover-content { position: relative; z-index: 2; max-width: 600px; }
+  .cover-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--blue-glow); margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+  .cover-caderno {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(72px, 14vw, 120px); font-weight: 900;
+    color: var(--paper); line-height: 1; letter-spacing: -4px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s ease forwards;
+  }
+  .cover-caderno span { color: var(--blue-mid); }
+  .cover-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 4vw, 30px); font-weight: 400; font-style: italic;
+    color: rgba(245,240,232,0.55); margin-top: 8px; margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s ease forwards;
+  }
+  .cover-principle {
+    font-size: 15px; color: rgba(245,240,232,0.38); font-style: italic;
+    border-top: 1px solid rgba(42,74,107,0.35); padding-top: 24px;
+    opacity: 0; animation: fadeUp 0.8s 0.9s ease forwards;
+    line-height: 1.7;
+  }
+  .cover-scroll {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(74,122,171,0.5); margin-top: 56px;
+    opacity: 0; animation: fadeUp 0.8s 1.2s ease forwards;
+  }
+  .cover-scroll::after {
+    content: ''; display: block; width: 1px; height: 36px;
+    background: var(--blue-mid); opacity: 0.3; margin: 10px auto 0;
+    animation: pulse 2s 2s ease-in-out infinite;
+  }
+
+  /* ── NAV ── */
+  .nav-index {
+    background: #111520; padding: 14px 32px;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid rgba(42,74,107,0.25);
+  }
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+  }
+  .nav-pill {
+    background: transparent; border: 1px solid rgba(42,74,107,0.35);
+    color: rgba(245,240,232,0.5); padding: 5px 14px; border-radius: 100px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
+    cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
+  }
+  .nav-pill:hover { background: rgba(42,74,107,0.2); border-color: var(--blue-mid); color: var(--blue-glow); }
+
+  /* ── SEÇÕES ── */
+  .section {
+    max-width: 760px; margin: 0 auto;
+    padding: 80px 32px; border-bottom: 1px solid var(--border);
+  }
+  .section:last-of-type { border-bottom: none; }
+  .section-num {
+    font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 900;
+    color: rgba(42,74,107,0.1); line-height: 1; margin-bottom: -20px; letter-spacing: -3px;
+  }
+  .section-tag {
+    font-size: 10px; font-weight: 500; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 4vw, 34px); font-weight: 700;
+    color: var(--ink); line-height: 1.2; margin-bottom: 28px;
+  }
+  .section-title em { font-style: italic; color: var(--blue); }
+  .lead { font-size: 17px; line-height: 1.7; color: var(--ink); margin-bottom: 24px; font-weight: 400; }
+  .body-text { font-size: 15px; color: #3d3830; line-height: 1.8; margin-bottom: 14px; }
+  .highlight {
+    background: rgba(42,74,107,0.07); border-left: 3px solid var(--blue);
+    padding: 14px 18px; margin: 20px 0; border-radius: 0 4px 4px 0;
+    font-size: 14px; color: var(--ink); font-style: italic;
+  }
+
+  /* ── BLOCO ESCURO ── */
+  .dark-block {
+    background: #111520; border-radius: 4px; padding: 28px 32px; margin: 28px 0;
+    position: relative; overflow: hidden;
+  }
+  .dark-block::before {
+    content: '"'; font-family: 'Playfair Display', serif; font-size: 110px;
+    color: rgba(74,122,171,0.06); position: absolute; top: -10px; left: 14px; line-height: 1;
+  }
+  .dark-label {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--blue-glow); margin-bottom: 14px; display: block;
+  }
+  .dark-quote {
+    font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic;
+    color: rgba(245,240,232,0.75); line-height: 1.6; position: relative; z-index: 2;
+  }
+  .dark-quote strong { color: var(--blue-glow); font-style: normal; }
+
+  /* ── CAMPOS PADRÃO ── */
+  .field-group { display: flex; flex-direction: column; gap: 2px; margin: 20px 0; }
+  .field-item { background: var(--light); padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; }
+  .field-num {
+    font-family: 'Playfair Display', serif; font-size: 22px;
+    font-weight: 700; color: rgba(42,74,107,0.3); min-width: 22px; line-height: 1.2;
+  }
+  .field-body { flex: 1; }
+  .field-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .field-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 5px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+    color: var(--ink); outline: none; transition: border-color 0.2s; resize: none;
+    min-height: 36px; line-height: 1.6;
+  }
+  .field-input:focus { border-bottom-color: var(--blue); }
+  .field-input::placeholder { color: var(--border); font-style: italic; }
+
+  /* ── YN GRID ── */
+  .yn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin: 24px 0; }
+  .yn-col { padding: 20px; }
+  .yn-col.nao { background: #f5ecea; }
+  .yn-col.sim { background: var(--blue-light); }
+  .yn-head { font-size: 10px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 14px; }
+  .yn-col.sim .yn-head { color: var(--blue); }
+  .yn-col.nao .yn-head { color: var(--accent); }
+  .yn-item { font-size: 14px; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.06); color: #3d3830; }
+  .yn-item:last-child { border: none; }
+
+  /* ── REGRA CENTRAL ── */
+  .regra-central {
+    background: var(--blue-light); border: 1px solid var(--blue-glow);
+    border-radius: 4px; padding: 22px 26px; margin: 28px 0; text-align: center;
+  }
+  .regra-central p {
+    font-family: 'Playfair Display', serif; font-size: 17px; font-style: italic;
+    color: var(--blue); line-height: 1.6;
+  }
+
+  /* ── M-00 DIREÇÃO ── */
+  .direcao-bloco {
+    background: var(--light); padding: 22px 24px; margin: 20px 0; border-radius: 4px;
+  }
+  .direcao-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px; display: block;
+  }
+  .direcao-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 2px solid var(--blue-glow); padding: 6px 0;
+    font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700;
+    color: var(--ink); outline: none; transition: border-color 0.2s;
+  }
+  .direcao-input:focus { border-bottom-color: var(--blue); }
+  .direcao-input::placeholder { color: var(--border); font-weight: 400; font-size: 16px; font-style: italic; }
+
+  .alinhamento-block {
+    background: var(--light); padding: 18px 20px; margin: 16px 0;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .alin-label { font-size: 14px; color: var(--ink); flex: 1; min-width: 200px; }
+  .alin-opts { display: flex; gap: 4px; }
+  .alin-opt {
+    padding: 5px 14px; font-size: 11px; font-weight: 500; letter-spacing: 1px;
+    text-transform: uppercase; cursor: pointer; border: 1px solid var(--border);
+    border-radius: 100px; background: transparent; transition: all 0.15s; color: var(--muted); user-select: none;
+  }
+  .alin-opt:hover { border-color: var(--blue); color: var(--blue); }
+  .alin-opt.active-sim { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+  .alin-opt.active-as  { background: #fef8ec; border-color: #8a6a10; color: #8a6a10; }
+  .alin-opt.active-nao { background: #f5ecea; border-color: var(--accent); color: var(--accent); }
+
+  /* ── M-01 AÇÕES ── */
+  .acoes-lista { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .acao-item {
+    background: var(--light); padding: 12px 18px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .acao-input {
+    flex: 1; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 3px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .acao-input:focus { border-bottom-color: var(--blue); }
+  .acao-input::placeholder { color: var(--border); font-style: italic; }
+  .acao-tag {
+    padding: 3px 12px; font-size: 11px; font-weight: 500; letter-spacing: 1px;
+    border: 1px solid var(--border); border-radius: 100px; cursor: pointer;
+    user-select: none; transition: all 0.15s; white-space: nowrap; color: var(--muted);
+    background: transparent;
+  }
+  .acao-tag:hover { border-color: var(--ink); }
+  .acao-tag.constroi { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+  .acao-tag.neutro   { background: #fef8ec; border-color: #8a6a10; color: #8a6a10; }
+  .acao-tag.dispersa { background: #f5ecea; border-color: var(--accent); color: var(--accent); }
+
+  .acoes-resumo {
+    display: flex; gap: 2px; margin-top: 16px;
+  }
+  .acoes-res-card { flex: 1; padding: 14px; text-align: center; }
+  .acoes-res-card.constroi { background: var(--blue-light); }
+  .acoes-res-card.neutro { background: #fef8ec; }
+  .acoes-res-card.dispersa { background: #f5ecea; }
+  .acoes-res-icon { font-size: 16px; margin-bottom: 4px; }
+  .acoes-res-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+  .acoes-res-card.constroi .acoes-res-label { color: var(--blue); }
+  .acoes-res-card.neutro .acoes-res-label { color: #8a6a10; }
+  .acoes-res-card.dispersa .acoes-res-label { color: var(--accent); }
+  .acoes-res-count {
+    font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
+  }
+  .acoes-res-card.constroi .acoes-res-count { color: var(--blue); }
+  .acoes-res-card.neutro .acoes-res-count { color: #8a6a10; }
+  .acoes-res-card.dispersa .acoes-res-count { color: var(--accent); }
+
+  /* ── M-02 POSICIONAMENTO ── */
+  .valor-semanal { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .valor-semanal-item {
+    background: var(--light); padding: 16px 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .vs-num {
+    font-family: 'Playfair Display', serif; font-size: 20px;
+    font-weight: 700; color: rgba(42,74,107,0.3); min-width: 22px; line-height: 1.2;
+  }
+  .vs-body { flex: 1; }
+  .vs-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .vs-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+    outline: none; resize: none; min-height: 36px; line-height: 1.6; transition: border-color 0.2s;
+  }
+  .vs-input:focus { border-bottom-color: var(--blue); }
+  .vs-input::placeholder { color: var(--border); font-style: italic; }
+
+  /* ── M-03 RELAÇÃO ── */
+  .modelo-relacao { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .modelo-step {
+    display: flex; gap: 16px; align-items: center; padding: 16px 20px;
+    background: var(--light); position: relative;
+  }
+  .modelo-step:not(:last-child)::after {
+    content: '↓'; position: absolute; bottom: -14px; left: 32px;
+    color: var(--blue-glow); font-size: 14px; z-index: 2; background: var(--paper); padding: 0 4px;
+    line-height: 1;
+  }
+  .modelo-step-num {
+    width: 32px; height: 32px; border-radius: 50%; background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blue-glow); font-size: 12px; font-weight: 500; flex-shrink: 0;
+  }
+  .modelo-step-body strong { display: block; font-size: 13px; font-weight: 500; color: var(--ink); }
+  .modelo-step-body span { font-size: 12px; color: var(--muted); }
+
+  .exemplo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin: 24px 0; }
+  .exemplo-col { padding: 20px; }
+  .exemplo-col.errado { background: #f5ecea; border-top: 3px solid var(--accent); }
+  .exemplo-col.certo  { background: var(--blue-light); border-top: 3px solid var(--blue); }
+  .exemplo-head { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+  .exemplo-col.errado .exemplo-head { color: var(--accent); }
+  .exemplo-col.certo  .exemplo-head { color: var(--blue); }
+  .exemplo-texto { font-size: 14px; color: var(--ink); line-height: 1.7; font-style: italic; }
+
+  /* ── M-04 VENDA ── */
+  .venda-fases { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .venda-fase {
+    background: var(--light); padding: 20px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .venda-fase-badge {
+    background: var(--ink); color: var(--blue-glow);
+    font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700;
+    padding: 4px 10px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .venda-fase-body { flex: 1; }
+  .venda-fase-titulo { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .venda-fase-exemplo { font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 10px; }
+  .venda-fase-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink);
+    outline: none; transition: border-color 0.2s; resize: none; min-height: 36px; line-height: 1.6;
+  }
+  .venda-fase-input:focus { border-bottom-color: var(--blue); }
+  .venda-fase-input::placeholder { color: var(--border); font-style: italic; }
+
+  /* ── M-05 PRESENÇA ── */
+  .conteudo-check { display: flex; gap: 2px; margin: 20px 0; }
+  .cont-card { flex: 1; padding: 16px 12px; text-align: center; background: var(--light); }
+  .cont-card.sim { background: var(--blue-light); }
+  .cont-icon { font-size: 18px; margin-bottom: 6px; }
+  .cont-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); }
+
+  .conteudo-exemplos { display: flex; flex-direction: column; gap: 2px; margin: 20px 0; }
+  .cont-ex { background: var(--blue-light); padding: 14px 18px; font-size: 14px; font-style: italic; color: var(--blue); border-left: 3px solid var(--blue); }
+
+  .postagens-lista { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .postagem-item {
+    background: var(--light); padding: 14px 18px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .post-num { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: rgba(42,74,107,0.3); min-width: 20px; }
+  .post-input {
+    flex: 1; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .post-input:focus { border-bottom-color: var(--blue); }
+  .post-input::placeholder { color: var(--border); font-style: italic; }
+  .post-check {
+    width: 22px; height: 22px; border: 1px solid var(--border); border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; background: white; transition: all 0.15s; flex-shrink: 0; user-select: none;
+  }
+  .post-check.ok { background: var(--blue); border-color: var(--blue); color: white; }
+
+  /* ── M-06 SISTEMA ── */
+  .sistema-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; margin: 24px 0; }
+  .sistema-col { background: var(--light); padding: 20px 18px; }
+  .sistema-col.ativa { background: var(--blue-light); }
+  .sistema-col-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sistema-col .sistema-col-label { color: var(--muted); }
+  .sistema-col.ativa .sistema-col-label { color: var(--blue); }
+  .sistema-pessoa { margin-bottom: 8px; }
+  .sistema-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 3px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .sistema-input:focus { border-bottom-color: var(--blue); }
+  .sistema-input::placeholder { color: var(--border); }
+
+  .sistema-fluxo {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin: 20px 0; flex-wrap: wrap;
+  }
+  .sf-step {
+    background: var(--blue-light); border: 1px solid var(--blue-glow);
+    padding: 10px 16px; border-radius: 4px; font-size: 13px; color: var(--blue); font-weight: 500;
+  }
+  .sf-arrow { color: var(--blue-glow); font-size: 16px; }
+
+  /* ── M-07 REVISÃO ── */
+  .revisao-list { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .revisao-item {
+    background: var(--light); padding: 18px 20px;
+    display: flex; gap: 14px; align-items: center;
+    cursor: pointer; user-select: none; transition: background 0.2s;
+  }
+  .revisao-item:hover { background: #e6e0d4; }
+  .revisao-item.yes { background: var(--blue-light); }
+  .rev-indicator {
+    width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0; background: white; transition: all 0.2s;
+  }
+  .revisao-item.yes .rev-indicator { background: var(--blue); border-color: var(--blue); color: white; }
+  .rev-q { font-size: 14px; color: var(--ink); }
+
+  .revisao-resultado {
+    background: #111520; border-radius: 4px; padding: 18px 22px; margin-top: 16px; display: none; text-align: center;
+  }
+  .revisao-resultado.show { display: block; }
+  .revisao-resultado p { font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; color: var(--blue-glow); }
+
+  /* ── EVIDÊNCIAS ── */
+  .ev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin: 24px 0; }
+  .ev-card { background: var(--light); padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .ev-icon { font-size: 18px; }
+  .ev-name { font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); }
+  .ev-textarea {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 3px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300;
+    color: var(--ink); outline: none; resize: none; min-height: 40px; line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+  .ev-textarea:focus { border-bottom-color: var(--blue); }
+  .ev-textarea::placeholder { color: var(--border); font-style: italic; }
+
+  /* ── VALIDAÇÃO ── */
+  .val-grid { display: flex; gap: 2px; margin: 24px 0; }
+  .val-item {
+    flex: 1; background: var(--light); padding: 18px 16px; text-align: center;
+    cursor: pointer; user-select: none; transition: background 0.2s; border: 2px solid transparent; border-radius: 2px;
+  }
+  .val-item:hover { background: #e6e0d4; }
+  .val-item.sel-dir  { background: var(--blue-light); border-color: var(--blue); }
+  .val-item.sel-ans  { background: #f5ecea; border-color: var(--accent); }
+  .val-item.sel-est  { background: #eef8f2; border-color: #3d6b4a; }
+  .val-dot { font-size: 20px; margin-bottom: 6px; }
+  .val-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+  .val-item.sel-dir  .val-label { color: var(--blue); }
+  .val-item.sel-ans  .val-label { color: var(--accent); }
+  .val-item.sel-est  .val-label { color: #3d6b4a; }
+
+  .val-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 2px; }
+  .val-field { background: var(--light); padding: 16px 18px; }
+  .val-field label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 8px; }
+  .val-field input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .val-field input:focus { border-bottom-color: var(--blue); }
+  .val-field input::placeholder { color: var(--border); }
+
+  /* ── FINAL ── */
+  .final-section { background: #111520; padding: 80px 32px; text-align: center; }
+  .final-inner { max-width: 600px; margin: 0 auto; }
+  .final-tag { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--blue-glow); margin-bottom: 24px; }
+  .final-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3.5vw, 28px); font-weight: 400; font-style: italic;
+    color: var(--paper); line-height: 1.5;
+  }
+  .final-quote strong { font-style: normal; font-weight: 700; color: var(--blue-glow); }
+  .final-sub { font-size: 12px; color: rgba(245,240,232,0.25); margin-top: 40px; letter-spacing: 2px; }
+  .cover-line { width: 60px; height: 1px; background: rgba(74,122,171,0.25); margin: 36px auto 0; }
+
+  /* ── ANIMAÇÕES ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.75} }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    .yn-grid, .exemplo-grid, .ev-grid, .val-fields, .sistema-grid, .habitos-grid { grid-template-columns: 1fr; }
+    .val-grid, .conteudo-check, .acoes-resumo { flex-direction: column; }
+    .nav-index { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<section class="cover">
+  <div class="cover-texture"></div>
+  <div class="cover-content">
+    <p class="cover-label">Caderno 4 · I.P.E.M · Ordenismo</p>
+    <h1 class="cover-caderno"><span>M</span>.</h1>
+    <p class="cover-name">Movimento</p>
+    <p class="cover-principle">"Você não cresce se escondendo.<br>Mas também não cresce se fingindo."</p>
+    <p class="cover-scroll">Comece aqui</p>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="nav-index">
+  <div class="nav-inner">
+    <a class="nav-pill" href="#m00">M-00 Direção</a>
+    <a class="nav-pill" href="#m01">M-01 Intenção</a>
+    <a class="nav-pill" href="#m02">M-02 Posicionamento</a>
+    <a class="nav-pill" href="#m03">M-03 Relação</a>
+    <a class="nav-pill" href="#m04">M-04 Venda</a>
+    <a class="nav-pill" href="#m05">M-05 Presença</a>
+    <a class="nav-pill" href="#m06">M-06 Sistema</a>
+    <a class="nav-pill" href="#m07">M-07 Revisão</a>
+    <a class="nav-pill" href="#evidencias">Evidências</a>
+  </div>
+</nav>
+
+<!-- FUNDAMENTO -->
+<section class="section reveal" id="fundamento">
+  <div class="section-num">M</div>
+  <p class="section-tag">O jogo real</p>
+  <h2 class="section-title">Movimento com propósito.<br><em>Não agitação.</em></h2>
+  <p class="lead">Movimento sem direção é energia desperdiçada. Este caderno ensina a se mover de um jeito que gera respeito, constrói reputação e cria resultado real — sem perder caráter.</p>
+
+  <div class="yn-grid">
+    <div class="yn-col nao">
+      <p class="yn-head">Ninguém compra de quem</p>
+      <div class="yn-item">Parece desesperado</div>
+      <div class="yn-item">Parece interesseiro</div>
+      <div class="yn-item">Só aparece quando quer algo</div>
+      <div class="yn-item">Não gera valor nenhum</div>
+    </div>
+    <div class="yn-col sim">
+      <p class="yn-head">As pessoas compram de quem</p>
+      <div class="yn-item">Resolve problemas reais</div>
+      <div class="yn-item">Ajuda sem esperar retorno</div>
+      <div class="yn-item">Entende antes de oferecer</div>
+      <div class="yn-item">É consistente ao longo do tempo</div>
+    </div>
+  </div>
+
+  <div class="regra-central">
+    <p>"Antes de qualquer ação, pergunte:<br>isso me aproxima do meu propósito ou só alimenta o meu ego?"<br><small style="font-size:13px;color:var(--muted);font-style:normal;">Se não aproxima — não faça.</small></p>
+  </div>
+</section>
+
+<!-- M-00 MAPA DE DIREÇÃO -->
+<section class="section reveal" id="m00">
+  <div class="section-num">M-00</div>
+  <p class="section-tag">Para onde eu estou indo</p>
+  <h2 class="section-title">Mapa de Direção.<br><em>Impedir movimento aleatório.</em></h2>
+  <p class="lead">Toda ação deve apontar para algum lugar. Se você não sabe onde quer chegar, qualquer caminho parece certo — e nenhum leva a lugar nenhum.</p>
+
+  <div class="direcao-bloco">
+    <span class="direcao-label">Meu propósito profissional (do Caderno P)</span>
+    <input class="direcao-input" type="text" placeholder="Traga sua Zona PD aqui..."/>
+  </div>
+
+  <div class="direcao-bloco">
+    <span class="direcao-label">Nos próximos 6 meses, eu quero estar:</span>
+    <input class="direcao-input" type="text" placeholder="Seja específico e concreto..."/>
+  </div>
+
+  <div class="alinhamento-block">
+    <span class="alin-label">Tudo que eu faço hoje aponta para esse destino?</span>
+    <div class="alin-opts">
+      <span class="alin-opt" onclick="toggleAlin(this,'sim')">Sim</span>
+      <span class="alin-opt" onclick="toggleAlin(this,'as')">Às vezes</span>
+      <span class="alin-opt" onclick="toggleAlin(this,'nao')">Não</span>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Se a resposta for "Não" — antes de avançar, identifique o que está te puxando para fora do caminho.
+  </div>
+</section>
+
+<!-- M-01 MOVIMENTO COM INTENÇÃO -->
+<section class="section reveal" id="m01">
+  <div class="section-num">M-01</div>
+  <p class="section-tag">Parar de andar em círculos</p>
+  <h2 class="section-title">Movimento com Intenção.<br><em>Transforme esforço em progresso.</em></h2>
+  <p class="lead">Liste o que você faz toda semana. Depois classifique cada ação. A meta é simples: reduzir o que dispersa, aumentar o que constrói.</p>
+
+  <div class="acoes-lista" id="acoes-lista"></div>
+  <button onclick="addAcao()" style="margin-top:2px;width:100%;padding:14px;background:var(--light);border:none;border-top:2px dashed var(--border);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#e6e0d4'" onmouseout="this.style.background='var(--light)'">+ Adicionar ação</button>
+
+  <div class="acoes-resumo" id="acoes-resumo">
+    <div class="acoes-res-card constroi"><div class="acoes-res-icon">✔</div><div class="acoes-res-label">Constrói</div><div class="acoes-res-count" id="cnt-constroi">0</div></div>
+    <div class="acoes-res-card neutro"><div class="acoes-res-icon">⚠️</div><div class="acoes-res-label">Neutro</div><div class="acoes-res-count" id="cnt-neutro">0</div></div>
+    <div class="acoes-res-card dispersa"><div class="acoes-res-icon">❌</div><div class="acoes-res-label">Dispersa</div><div class="acoes-res-count" id="cnt-dispersa">0</div></div>
+  </div>
+</section>
+
+<!-- M-02 POSICIONAMENTO -->
+<section class="section reveal" id="m02">
+  <div class="section-num">M-02</div>
+  <p class="section-tag">Ser interessante antes de ser interessado</p>
+  <h2 class="section-title">Posicionamento Silencioso.<br><em>Construir respeito antes de pedir.</em></h2>
+  <p class="lead">Reputação não se declara — se acumula. Cada vez que você entrega valor sem pedir nada em troca, você deposita na sua conta de confiança.</p>
+
+  <div class="field-group">
+    <div class="field-item">
+      <div class="field-num">1</div>
+      <div class="field-body">
+        <p class="field-label">Por que alguém confiaria em mim?</p>
+        <textarea class="field-input" placeholder="Liste motivos reais e concretos..."></textarea>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">2</div>
+      <div class="field-body">
+        <p class="field-label">Qual é o meu diferencial que não depende de diploma ou título?</p>
+        <textarea class="field-input" placeholder="O que você já viveu, superou ou domina..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-tag" style="margin-top:32px;margin-bottom:12px">Valor Visível — Registro Semanal</p>
+  <p class="body-text">Toda semana, registre o que você entregou sem pedir nada. Isso é o que constrói reputação.</p>
+
+  <div class="valor-semanal" id="valor-semanal">
+    <div class="valor-semanal-item"><div class="vs-num">S1</div><div class="vs-body"><div class="vs-label">Semana 1 — o que entreguei sem pedir nada</div><textarea class="vs-input" placeholder="Descreva as ações de valor..."></textarea></div></div>
+    <div class="valor-semanal-item"><div class="vs-num">S2</div><div class="vs-body"><div class="vs-label">Semana 2</div><textarea class="vs-input" placeholder=""></textarea></div></div>
+    <div class="valor-semanal-item"><div class="vs-num">S3</div><div class="vs-body"><div class="vs-label">Semana 3</div><textarea class="vs-input" placeholder=""></textarea></div></div>
+    <div class="valor-semanal-item"><div class="vs-num">S4</div><div class="vs-body"><div class="vs-label">Semana 4</div><textarea class="vs-input" placeholder=""></textarea></div></div>
+  </div>
+</section>
+
+<!-- M-03 RELAÇÃO -->
+<section class="section reveal" id="m03">
+  <div class="section-num">M-03</div>
+  <p class="section-tag">Relação antes de negócio</p>
+  <h2 class="section-title">Construção de Relação.<br><em>Evitar abordagem fria.</em></h2>
+  <p class="lead">Ninguém quer ser abordado — as pessoas querem ser compreendidas. O modelo abaixo não é script. É sequência natural de quem respeita.</p>
+
+  <div class="modelo-relacao">
+    <div class="modelo-step"><div class="modelo-step-num">1</div><div class="modelo-step-body"><strong>Observe</strong><span>Entenda o contexto da pessoa antes de falar qualquer coisa</span></div></div>
+    <div class="modelo-step"><div class="modelo-step-num">2</div><div class="modelo-step-body"><strong>Compreenda</strong><span>Faça perguntas genuínas. Ouça de verdade</span></div></div>
+    <div class="modelo-step"><div class="modelo-step-num">3</div><div class="modelo-step-body"><strong>Ajude</strong><span>Contribua sem esperar retorno imediato</span></div></div>
+    <div class="modelo-step"><div class="modelo-step-num">4</div><div class="modelo-step-body"><strong>Só depois ofereça</strong><span>Quando houver contexto e confiança construída</span></div></div>
+  </div>
+
+  <div class="exemplo-grid">
+    <div class="exemplo-col errado">
+      <p class="exemplo-head">❌ Abordagem errada</p>
+      <p class="exemplo-texto">"Posso te ajudar com isso." — dito imediatamente, sem entender nada sobre a pessoa.</p>
+    </div>
+    <div class="exemplo-col certo">
+      <p class="exemplo-head">✔ Abordagem certa</p>
+      <p class="exemplo-texto">"Passei por isso. O que mais te trava hoje: o cliente ou a organização?" — depois de ouvir, ajuda. Só então propõe.</p>
+    </div>
+  </div>
+
+  <div class="field-group" style="margin-top:28px">
+    <div class="field-item">
+      <div class="field-num">1</div>
+      <div class="field-body">
+        <p class="field-label">Com quem você está construindo relação agora?</p>
+        <textarea class="field-input" placeholder="Nome ou perfil das pessoas..."></textarea>
+      </div>
+    </div>
+    <div class="field-item">
+      <div class="field-num">2</div>
+      <div class="field-body">
+        <p class="field-label">O que você já entregou para essas pessoas antes de pedir?</p>
+        <textarea class="field-input" placeholder="Seja concreto..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- M-04 VENDA -->
+<section class="section reveal" id="m04">
+  <div class="section-num">M-04</div>
+  <p class="section-tag">Não empurre. Construa.</p>
+  <h2 class="section-title">Venda como Consequência.<br><em>Madura. Sem teatro. Sem pressão.</em></h2>
+  <p class="lead">Venda no I.P.E.M não é "compra de mim." É "faz sentido pra você?" Essa distinção muda tudo. Pratique as quatro fases abaixo com uma situação real.</p>
+
+  <div class="dark-block" style="margin-bottom:28px">
+    <span class="dark-label">A diferença central</span>
+    <p class="dark-quote">Venda ruim: <strong>"Compra de mim."</strong><br>Venda madura: <strong>"Faz sentido pra você?"</strong></p>
+  </div>
+
+  <div class="venda-fases">
+    <div class="venda-fase">
+      <div class="venda-fase-badge">1</div>
+      <div class="venda-fase-body">
+        <div class="venda-fase-titulo">Diagnóstico — entender a pessoa</div>
+        <div class="venda-fase-exemplo">Exemplo: "O que hoje mais te atrapalha no negócio?"</div>
+        <textarea class="venda-fase-input" placeholder="Como você vai perguntar na sua situação real..."></textarea>
+      </div>
+    </div>
+    <div class="venda-fase">
+      <div class="venda-fase-badge">2</div>
+      <div class="venda-fase-body">
+        <div class="venda-fase-titulo">Clareza — mostrar o problema</div>
+        <div class="venda-fase-exemplo">Exemplo: "Percebe que o problema não é marketing, é rotina?"</div>
+        <textarea class="venda-fase-input" placeholder="Como você vai nomear o problema real..."></textarea>
+      </div>
+    </div>
+    <div class="venda-fase">
+      <div class="venda-fase-badge">3</div>
+      <div class="venda-fase-body">
+        <div class="venda-fase-titulo">Caminho — apontar a solução</div>
+        <div class="venda-fase-exemplo">Exemplo: "Se você organizar isso primeiro, destrava."</div>
+        <textarea class="venda-fase-input" placeholder="Como você vai mostrar o caminho..."></textarea>
+      </div>
+    </div>
+    <div class="venda-fase">
+      <div class="venda-fase-badge">4</div>
+      <div class="venda-fase-body">
+        <div class="venda-fase-titulo">Convite — não pressão</div>
+        <div class="venda-fase-exemplo">Exemplo: "Se quiser, eu te acompanho nisso."</div>
+        <textarea class="venda-fase-input" placeholder="Como você vai convidar sem pressionar..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- M-05 PRESENÇA -->
+<section class="section reveal" id="m05">
+  <div class="section-num">M-05</div>
+  <p class="section-tag">Aparecer com conteúdo</p>
+  <h2 class="section-title">Presença com Propósito.<br><em>Parar de postar vazio.</em></h2>
+  <p class="lead">Presença não é frequência — é relevância. Antes de publicar qualquer coisa, passe pelo filtro abaixo. Se não passa, não posta.</p>
+
+  <div class="conteudo-check">
+    <div class="cont-card sim"><div class="cont-icon">🎓</div><div class="cont-label">Ensina</div></div>
+    <div class="cont-card sim"><div class="cont-icon">💡</div><div class="cont-label">Ajuda</div></div>
+    <div class="cont-card sim"><div class="cont-icon">🪞</div><div class="cont-label">Provoca reflexão</div></div>
+  </div>
+
+  <p class="body-text" style="margin-top:20px">Exemplos de conteúdo que posiciona:</p>
+  <div class="conteudo-exemplos">
+    <div class="cont-ex">"Hoje entendi por que meu negócio não crescia — e não era o que eu pensava."</div>
+    <div class="cont-ex">"3 erros que quase me quebraram e o que aprendi com cada um."</div>
+    <div class="cont-ex">"Como organizei minha semana para sair do caos sem largar tudo."</div>
+  </div>
+
+  <p class="section-tag" style="margin-top:32px;margin-bottom:12px">Planejamento de Postagens — Esta Semana</p>
+  <div class="postagens-lista" id="postagens-lista">
+    <div class="postagem-item"><div class="post-num">1</div><input class="post-input" type="text" placeholder="Ideia de postagem que passa no filtro..."/><span class="post-check" onclick="this.classList.toggle('ok');this.textContent=this.classList.contains('ok')?'✔':''"> </span></div>
+    <div class="postagem-item"><div class="post-num">2</div><input class="post-input" type="text" placeholder=""/><span class="post-check" onclick="this.classList.toggle('ok');this.textContent=this.classList.contains('ok')?'✔':''"> </span></div>
+    <div class="postagem-item"><div class="post-num">3</div><input class="post-input" type="text" placeholder=""/><span class="post-check" onclick="this.classList.toggle('ok');this.textContent=this.classList.contains('ok')?'✔':''"> </span></div>
+  </div>
+</section>
+
+<!-- M-06 SISTEMA -->
+<section class="section reveal" id="m06">
+  <div class="section-num">M-06</div>
+  <p class="section-tag">Plantar para colher</p>
+  <h2 class="section-title">Sistema de Oportunidades.<br><em>Criar fluxo, não corrida.</em></h2>
+  <p class="lead">Oportunidade não aparece — é cultivada. Toda semana, mova pelo menos uma pessoa de uma lista para a próxima. É assim que o fluxo se forma.</p>
+
+  <div class="sistema-grid">
+    <div class="sistema-col">
+      <div class="sistema-col-label">👁️ Acompanho</div>
+      <div id="acomp-list"></div>
+    </div>
+    <div class="sistema-col">
+      <div class="sistema-col-label">🤝 Ajudo</div>
+      <div id="ajudo-list"></div>
+    </div>
+    <div class="sistema-col ativa">
+      <div class="sistema-col-label">⭐ Confiam</div>
+      <div id="confiam-list"></div>
+    </div>
+  </div>
+
+  <div class="sistema-fluxo">
+    <div class="sf-step">Acompanho</div>
+    <div class="sf-arrow">→</div>
+    <div class="sf-step">Ajudo</div>
+    <div class="sf-arrow">→</div>
+    <div class="sf-step">Confiam</div>
+    <div class="sf-arrow">→</div>
+    <div class="sf-step" style="background:var(--blue);color:white;border-color:var(--blue)">Oportunidade</div>
+  </div>
+
+  <div class="highlight">
+    Toda semana: mova pelo menos uma pessoa de "Acompanho" para "Ajudo". O resultado vem depois — não force.
+  </div>
+</section>
+
+<!-- M-07 REVISÃO ESTRATÉGICA -->
+<section class="section reveal" id="m07">
+  <div class="section-num">M-07</div>
+  <p class="section-tag">Cresci com dignidade?</p>
+  <h2 class="section-title">Revisão Estratégica.<br><em>Movimento ou agitação?</em></h2>
+  <p class="lead">A diferença entre quem cresce e quem se agita não é velocidade — é intenção. Responda com honestidade.</p>
+
+  <div class="revisao-list">
+    <div class="revisao-item" onclick="toggleRevisao(this)"><div class="rev-indicator">—</div><span class="rev-q">Fui intencional nas minhas ações?</span></div>
+    <div class="revisao-item" onclick="toggleRevisao(this)"><div class="rev-indicator">—</div><span class="rev-q">Agreguei valor sem esperar retorno?</span></div>
+    <div class="revisao-item" onclick="toggleRevisao(this)"><div class="rev-indicator">—</div><span class="rev-q">Respeitei as pessoas no processo?</span></div>
+    <div class="revisao-item" onclick="toggleRevisao(this)"><div class="rev-indicator">—</div><span class="rev-q">Construí algo que vai durar?</span></div>
+    <div class="revisao-item" onclick="toggleRevisao(this)"><div class="rev-indicator">—</div><span class="rev-q">Ou só me agitei sem direção?</span></div>
+  </div>
+
+  <div class="revisao-resultado" id="revisao-resultado">
+    <p id="revisao-texto"></p>
+  </div>
+</section>
+
+<!-- EVIDÊNCIAS -->
+<section class="section reveal" id="evidencias">
+  <div class="section-num">E</div>
+  <p class="section-tag">Capital moral</p>
+  <h2 class="section-title">Evidências.<br><em>Isso é patrimônio.</em></h2>
+  <p class="lead">Depoimentos, mensagens, indicações e convites são o seu ativo mais valioso. Registre tudo. O que não está registrado não existe.</p>
+
+  <div class="ev-grid">
+    <div class="ev-card">
+      <div class="ev-icon">💬</div>
+      <div class="ev-name">Depoimentos</div>
+      <textarea class="ev-textarea" placeholder="Prints, falas, mensagens de quem você ajudou..."></textarea>
+    </div>
+    <div class="ev-card">
+      <div class="ev-icon">📩</div>
+      <div class="ev-name">Mensagens recebidas</div>
+      <textarea class="ev-textarea" placeholder="Agradecimentos, pedidos de ajuda, reconhecimento..."></textarea>
+    </div>
+    <div class="ev-card">
+      <div class="ev-icon">🔗</div>
+      <div class="ev-name">Indicações</div>
+      <textarea class="ev-textarea" placeholder="Quem te indicou para quem?"></textarea>
+    </div>
+    <div class="ev-card">
+      <div class="ev-icon">🎯</div>
+      <div class="ev-name">Convites e oportunidades</div>
+      <textarea class="ev-textarea" placeholder="Parcerias, convites, colaborações..."></textarea>
+    </div>
+  </div>
+
+  <p class="section-tag" style="margin-top:40px;margin-bottom:16px">Validação do Facilitador</p>
+  <div class="val-grid">
+    <div class="val-item" onclick="selectVal(this,'dir')"><div class="val-dot">🧭</div><div class="val-label">Movimento com direção</div></div>
+    <div class="val-item" onclick="selectVal(this,'ans')"><div class="val-dot">⚡</div><div class="val-label">Movimento ansioso</div></div>
+    <div class="val-item" onclick="selectVal(this,'est')"><div class="val-dot">♟️</div><div class="val-label">Movimento estratégico</div></div>
+  </div>
+  <div class="val-fields" style="margin-top:2px">
+    <div class="val-field"><label>Assinatura do Facilitador</label><input type="text" placeholder="Nome e assinatura"/></div>
+    <div class="val-field"><label>Data</label><input type="text" placeholder="__ / __ / ____"/></div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final-section reveal">
+  <div class="final-inner">
+    <p class="final-tag">Caderno M — Concluído</p>
+    <p class="final-quote">
+      "Influência é<br>
+      <strong>reputação acumulada."</strong>
+    </p>
+    <div class="cover-line"></div>
+    <p class="final-sub">I.P.E.M · Caderno M · Movimento · Ordenismo</p>
+  </div>
+</section>
+
+<script>
+/* ── AÇÕES M-01 ── */
+const acoesList = document.getElementById('acoes-lista');
+const counts = { constroi: 0, neutro: 0, dispersa: 0 };
+
+function addAcao() {
+  const div = document.createElement('div');
+  div.className = 'acao-item';
+  div.innerHTML = `
+    <input class="acao-input" type="text" placeholder="O que você faz toda semana..."/>
+    <span class="acao-tag" onclick="cycleAcao(this)">—</span>
+  `;
+  acoesList.appendChild(div);
+}
+
+function cycleAcao(el) {
+  const states   = ['—','✔ Constrói','⚠️ Neutro','❌ Dispersa'];
+  const classes  = ['','constroi','neutro','dispersa'];
+  const keys     = ['','constroi','neutro','dispersa'];
+  const prev = el.dataset.state || '0';
+  const prevIdx  = parseInt(prev);
+  if (prevIdx > 0) counts[keys[prevIdx]] = Math.max(0, counts[keys[prevIdx]] - 1);
+  const next = (prevIdx + 1) % states.length;
+  el.dataset.state = next;
+  el.textContent = states[next];
+  el.className = 'acao-tag ' + classes[next];
+  if (next > 0) counts[keys[next]]++;
+  document.getElementById('cnt-constroi').textContent = counts.constroi;
+  document.getElementById('cnt-neutro').textContent   = counts.neutro;
+  document.getElementById('cnt-dispersa').textContent = counts.dispersa;
+}
+
+for (let i = 0; i < 6; i++) addAcao();
+
+/* ── SISTEMA M-06 ── */
+['acomp-list','ajudo-list','confiam-list'].forEach(id => {
+  const el = document.getElementById(id);
+  for (let i = 0; i < 5; i++) {
+    const d = document.createElement('div');
+    d.className = 'sistema-pessoa';
+    d.innerHTML = `<input class="sistema-input" type="text" placeholder="Nome..."/>`;
+    el.appendChild(d);
+  }
+});
+
+/* ── ALINHAMENTO ── */
+function toggleAlin(el, tipo) {
+  const parent = el.closest('.alin-opts');
+  parent.querySelectorAll('.alin-opt').forEach(o => o.classList.remove('active-sim','active-as','active-nao'));
+  el.classList.add('active-' + tipo);
+}
+
+/* ── REVISÃO ── */
+function toggleRevisao(el) {
+  el.classList.toggle('yes');
+  el.querySelector('.rev-indicator').textContent = el.classList.contains('yes') ? '✔' : '—';
+  const total = document.querySelectorAll('.revisao-item.yes').length;
+  const res   = document.getElementById('revisao-resultado');
+  const txt   = document.getElementById('revisao-texto');
+  res.classList.add('show');
+  if (total >= 4) txt.textContent = 'Movimento com dignidade. Caderno M cumprido.';
+  else if (total >= 2) txt.textContent = `${total} de 5 — atenção às que faltam. Ajuste antes de avançar.`;
+  else txt.textContent = 'Revise as ações da semana. Pode estar havendo mais agitação do que construção.';
+}
+
+/* ── VALIDAÇÃO ── */
+function selectVal(el, tipo) {
+  document.querySelectorAll('.val-item').forEach(v => v.classList.remove('sel-dir','sel-ans','sel-est'));
+  el.classList.add('sel-' + tipo);
+}
+
+/* ── REVEAL ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

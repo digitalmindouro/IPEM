@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Caderno I — Intelecto · I.P.E.M</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #1a1713;
+    --paper: #f5f0e8;
+    --warm: #c8a96e;
+    --gold: #d4a843;
+    --accent: #8b3a2a;
+    --muted: #7a7060;
+    --light: #ede8dc;
+    --border: #d4cdbf;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ── CAPA ── */
+  .cover {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 60px 32px;
+    position: relative; background: var(--ink); overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #2e2820 0%, #1a1713 100%);
+  }
+  .cover-texture {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(200,169,110,0.03) 60px, rgba(200,169,110,0.03) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(200,169,110,0.03) 60px, rgba(200,169,110,0.03) 61px);
+  }
+  .cover-content { position: relative; z-index: 2; max-width: 600px; }
+  .cover-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--warm); margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+  .cover-caderno {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(72px, 14vw, 120px); font-weight: 900;
+    color: var(--paper); line-height: 1; letter-spacing: -4px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s ease forwards;
+  }
+  .cover-caderno span { color: var(--gold); }
+  .cover-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 4vw, 30px); font-weight: 400; font-style: italic;
+    color: rgba(245,240,232,0.6); margin-top: 8px; margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s ease forwards;
+  }
+  .cover-principle {
+    font-size: 15px; color: rgba(245,240,232,0.45); font-style: italic;
+    border-top: 1px solid rgba(200,169,110,0.2); padding-top: 24px;
+    opacity: 0; animation: fadeUp 0.8s 0.9s ease forwards;
+  }
+  .cover-scroll {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(200,169,110,0.5); margin-top: 56px;
+    opacity: 0; animation: fadeUp 0.8s 1.2s ease forwards;
+  }
+  .cover-scroll::after {
+    content: ''; display: block; width: 1px; height: 36px;
+    background: var(--warm); opacity: 0.35; margin: 10px auto 0;
+    animation: pulse 2s 2s ease-in-out infinite;
+  }
+
+  /* ── NAV ── */
+  .nav-index {
+    background: var(--ink); padding: 14px 32px;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid rgba(200,169,110,0.15);
+  }
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+  }
+  .nav-pill {
+    background: transparent; border: 1px solid rgba(200,169,110,0.25);
+    color: rgba(245,240,232,0.55); padding: 5px 14px; border-radius: 100px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
+    cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
+  }
+  .nav-pill:hover { background: rgba(200,169,110,0.12); border-color: var(--warm); color: var(--warm); }
+
+  /* ── SEÇÕES ── */
+  .section {
+    max-width: 760px; margin: 0 auto;
+    padding: 80px 32px; border-bottom: 1px solid var(--border);
+  }
+  .section:last-of-type { border-bottom: none; }
+  .section-num {
+    font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 900;
+    color: rgba(200,169,110,0.12); line-height: 1; margin-bottom: -20px; letter-spacing: -3px;
+  }
+  .section-tag {
+    font-size: 10px; font-weight: 500; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 4vw, 34px); font-weight: 700;
+    color: var(--ink); line-height: 1.2; margin-bottom: 28px;
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+  .lead { font-size: 17px; line-height: 1.7; color: var(--ink); margin-bottom: 24px; font-weight: 400; }
+  .body-text { font-size: 15px; color: #3d3830; line-height: 1.8; margin-bottom: 14px; }
+  .highlight {
+    background: rgba(200,169,110,0.1); border-left: 3px solid var(--warm);
+    padding: 14px 18px; margin: 20px 0; border-radius: 0 4px 4px 0;
+    font-size: 14px; color: var(--ink); font-style: italic;
+  }
+
+  /* ── RODA DA VIDA ── */
+  .wheel-wrap {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 40px; margin: 36px 0;
+  }
+  #wheel-canvas { max-width: 420px; width: 100%; cursor: pointer; }
+
+  .wheel-controls {
+    width: 100%; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 2px;
+  }
+
+  .wheel-item {
+    background: var(--light); padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  .wheel-item-header {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .wheel-item-name {
+    font-size: 12px; font-weight: 500; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--accent);
+  }
+
+  .wheel-item-group {
+    font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  .wheel-score-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 700; color: var(--ink); min-width: 32px; text-align: right;
+  }
+
+  .wheel-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 3px; background: var(--border);
+    outline: none; border-radius: 2px; cursor: pointer;
+  }
+  .wheel-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--ink); cursor: pointer;
+    border: 2px solid var(--warm); transition: transform 0.15s;
+  }
+  .wheel-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+  /* ── LEITURA DA RODA ── */
+  .roda-leitura { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .roda-leitura-item {
+    background: var(--light); padding: 16px 20px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .roda-q-num {
+    font-family: 'Playfair Display', serif; font-size: 22px;
+    font-weight: 700; color: var(--warm); min-width: 24px; line-height: 1.2;
+  }
+  .roda-q-body { flex: 1; }
+  .roda-q-label { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .roda-q-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+    color: var(--ink); outline: none; transition: border-color 0.2s;
+  }
+  .roda-q-input:focus { border-bottom-color: var(--warm); }
+  .roda-q-input::placeholder { color: var(--border); }
+
+  /* ── ÁREA MESTRA ── */
+  .area-mestra-block {
+    background: var(--ink); border-radius: 4px;
+    padding: 28px 32px; margin: 28px 0; position: relative; overflow: hidden;
+  }
+  .area-mestra-block::before {
+    content: '★'; font-family: 'Playfair Display', serif; font-size: 100px;
+    color: rgba(200,169,110,0.06); position: absolute; top: -10px; right: 16px; line-height: 1;
+  }
+  .area-mestra-label {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--warm); margin-bottom: 10px; display: block;
+  }
+  .area-mestra-question {
+    font-family: 'Playfair Display', serif; font-size: 17px; font-style: italic;
+    color: rgba(245,240,232,0.7); margin-bottom: 18px; line-height: 1.5;
+  }
+  .area-mestra-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid rgba(200,169,110,0.3); padding: 8px 0;
+    font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700;
+    color: var(--gold); outline: none; transition: border-color 0.2s;
+    position: relative; z-index: 2;
+  }
+  .area-mestra-input:focus { border-bottom-color: var(--warm); }
+  .area-mestra-input::placeholder { color: rgba(200,169,110,0.2); font-weight: 400; font-size: 16px; }
+
+  /* ── DUMP MENTAL ── */
+  .dump-area {
+    width: 100%; min-height: 240px; background: var(--light);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 20px; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 300; color: var(--ink);
+    line-height: 1.8; outline: none; resize: vertical;
+    transition: border-color 0.2s;
+  }
+  .dump-area:focus { border-color: var(--warm); }
+  .dump-area::placeholder { color: var(--border); font-style: italic; }
+
+  .dump-rules {
+    display: flex; gap: 2px; margin: 16px 0;
+  }
+  .dump-rule {
+    flex: 1; padding: 14px 12px; text-align: center;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.5px;
+  }
+  .dump-rule.no { background: #f5ecea; color: var(--accent); }
+  .dump-rule.yes { background: #f0f5ec; color: #4a7a35; }
+
+  /* ── ORGANIZAÇÃO (I-02) ── */
+  .org-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin: 28px 0;
+  }
+  .org-block { background: var(--light); padding: 20px 18px; }
+  .org-block-title {
+    font-size: 10px; font-weight: 500; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .org-block-title span { font-size: 14px; }
+  .org-textarea {
+    width: 100%; min-height: 100px; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300;
+    color: var(--ink); outline: none; resize: none; line-height: 1.8;
+    transition: border-color 0.2s;
+  }
+  .org-textarea:focus { border-bottom-color: var(--warm); }
+  .org-textarea::placeholder { color: var(--border); font-style: italic; }
+
+  /* Priorização */
+  .prio-grid { display: flex; gap: 2px; margin: 20px 0; }
+  .prio-card {
+    flex: 1; padding: 16px 14px; text-align: center;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .prio-card.urgente { background: #f5ecea; }
+  .prio-card.importante { background: #fef8ec; }
+  .prio-card.espera { background: var(--light); }
+  .prio-icon { font-size: 18px; }
+  .prio-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .prio-card.urgente .prio-label { color: var(--accent); }
+  .prio-card.importante .prio-label { color: #8a6a10; }
+  .prio-card.espera .prio-label { color: var(--muted); }
+  .prio-textarea {
+    width: 100%; min-height: 80px; background: transparent; border: none;
+    border-top: 1px solid rgba(0,0,0,0.08); padding: 8px 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 300;
+    color: var(--ink); outline: none; resize: none; line-height: 1.7;
+  }
+  .prio-textarea::placeholder { color: rgba(0,0,0,0.18); font-style: italic; }
+
+  /* ── I-03 CRITÉRIO ── */
+  .criterio-pergunta {
+    background: var(--ink); padding: 24px 28px; border-radius: 4px; margin: 24px 0;
+    position: relative; overflow: hidden;
+  }
+  .criterio-pergunta::before {
+    content: '?'; font-family: 'Playfair Display', serif; font-size: 140px;
+    font-weight: 900; color: rgba(200,169,110,0.05);
+    position: absolute; right: 16px; top: -20px; line-height: 1;
+  }
+  .criterio-pergunta p {
+    font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic;
+    color: rgba(245,240,232,0.8); position: relative; z-index: 2;
+  }
+
+  .criterio-opcoes { display: flex; gap: 2px; margin: 20px 0; }
+  .criterio-opt {
+    flex: 1; padding: 16px 12px; text-align: center;
+    cursor: pointer; transition: all 0.2s; border: 2px solid transparent;
+    border-radius: 2px;
+  }
+  .criterio-opt.aproxima { background: #f0f5ec; }
+  .criterio-opt.afasta { background: #f5ecea; }
+  .criterio-opt.neutro { background: var(--light); }
+  .criterio-opt:hover { filter: brightness(0.96); }
+  .criterio-opt.selected { border-color: var(--ink); }
+  .criterio-opt-icon { font-size: 20px; margin-bottom: 4px; }
+  .criterio-opt-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .criterio-opt.aproxima .criterio-opt-label { color: #4a7a35; }
+  .criterio-opt.afasta .criterio-opt-label { color: var(--accent); }
+  .criterio-opt.neutro .criterio-opt-label { color: var(--muted); }
+
+  .criterio-registro { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 16px; }
+  .criterio-field { background: var(--light); padding: 16px 18px; }
+  .criterio-field label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); display: block; margin-bottom: 8px;
+  }
+  .criterio-field input, .criterio-field textarea {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+    color: var(--ink); outline: none; resize: none;
+    transition: border-color 0.2s;
+  }
+  .criterio-field input:focus, .criterio-field textarea:focus { border-bottom-color: var(--warm); }
+  .criterio-field input::placeholder, .criterio-field textarea::placeholder { color: var(--border); }
+
+  /* ── I-04 FOCO ── */
+  .foco-declaracao {
+    background: var(--light); border-left: 4px solid var(--gold);
+    padding: 20px 22px; margin: 20px 0; border-radius: 0 4px 4px 0;
+  }
+  .foco-declaracao label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); display: block; margin-bottom: 10px;
+  }
+  .foco-declaracao textarea {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 6px 0;
+    font-family: 'Playfair Display', serif; font-size: 17px; font-style: italic;
+    font-weight: 400; color: var(--ink); outline: none; resize: none;
+    line-height: 1.6; transition: border-color 0.2s; min-height: 60px;
+  }
+  .foco-declaracao textarea:focus { border-bottom-color: var(--warm); }
+  .foco-declaracao textarea::placeholder { color: var(--border); }
+
+  .compromissos-list { margin: 24px 0; display: flex; flex-direction: column; gap: 2px; }
+  .compromisso-item {
+    background: var(--light); padding: 14px 20px;
+    display: flex; gap: 14px; align-items: center;
+  }
+  .comp-num {
+    font-family: 'Playfair Display', serif; font-size: 22px;
+    font-weight: 700; color: rgba(200,169,110,0.4); min-width: 20px;
+  }
+  .comp-input {
+    flex: 1; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+    color: var(--ink); outline: none; transition: border-color 0.2s;
+  }
+  .comp-input:focus { border-bottom-color: var(--warm); }
+  .comp-input::placeholder { color: var(--border); }
+
+  .renuncias-block { background: #f5ecea; padding: 20px 22px; margin: 20px 0; border-radius: 4px; }
+  .renuncias-block label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 14px;
+  }
+  .renuncia-item { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .renuncia-item::before {
+    content: '—'; color: var(--accent); font-size: 14px; flex-shrink: 0;
+  }
+  .renuncia-input {
+    flex: 1; background: transparent; border: none;
+    border-bottom: 1px solid rgba(139,58,42,0.2); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+    color: var(--ink); outline: none; transition: border-color 0.2s;
+  }
+  .renuncia-input:focus { border-bottom-color: var(--accent); }
+  .renuncia-input::placeholder { color: rgba(139,58,42,0.25); }
+
+  /* ── REVISÃO MENSAL ── */
+  .revisao-list { display: flex; flex-direction: column; gap: 2px; margin: 24px 0; }
+  .revisao-item {
+    background: var(--light); padding: 20px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .rev-num {
+    font-family: 'Playfair Display', serif; font-size: 26px;
+    font-weight: 700; color: var(--warm); min-width: 28px; line-height: 1.1;
+  }
+  .rev-body { flex: 1; }
+  .rev-q { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+  .rev-input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 6px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+    color: var(--ink); outline: none; resize: none; min-height: 44px;
+    line-height: 1.6; transition: border-color 0.2s;
+  }
+  .rev-input:focus { border-bottom-color: var(--warm); }
+  .rev-input::placeholder { color: var(--border); font-style: italic; }
+
+  /* ── EVIDÊNCIAS ── */
+  .evidencias-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin: 24px 0; }
+  .ev-card { background: var(--light); padding: 16px; text-align: center; }
+  .ev-icon { font-size: 20px; margin-bottom: 6px; }
+  .ev-label { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+
+  .ev-final {
+    background: var(--ink); padding: 24px 28px; border-radius: 4px; margin: 20px 0;
+  }
+  .ev-final label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--warm); display: block; margin-bottom: 12px;
+  }
+  .ev-final-q {
+    font-family: 'Playfair Display', serif; font-size: 17px; font-style: italic;
+    color: rgba(245,240,232,0.65); margin-bottom: 16px;
+  }
+  .ev-final textarea {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid rgba(200,169,110,0.25); padding: 6px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+    color: var(--paper); outline: none; resize: none; min-height: 60px;
+    line-height: 1.7; transition: border-color 0.2s;
+  }
+  .ev-final textarea:focus { border-bottom-color: var(--warm); }
+  .ev-final textarea::placeholder { color: rgba(245,240,232,0.2); font-style: italic; }
+
+  /* ── VALIDAÇÃO ── */
+  .validacao-block {
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 28px; margin: 24px 0;
+  }
+  .validacao-checks { display: flex; gap: 2px; margin: 16px 0; }
+  .val-check {
+    flex: 1; padding: 16px 12px; text-align: center; cursor: pointer;
+    background: var(--light); border: 2px solid transparent;
+    border-radius: 2px; transition: all 0.2s; user-select: none;
+  }
+  .val-check:hover { filter: brightness(0.96); }
+  .val-check.selected.aprovado { border-color: #4a7a35; background: #f0f5ec; }
+  .val-check.selected.ajustar { border-color: #8a6a10; background: #fef8ec; }
+  .val-check.selected.reaplicar { border-color: var(--accent); background: #f5ecea; }
+  .val-check-icon { font-size: 18px; margin-bottom: 4px; }
+  .val-check-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+  }
+  .val-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 2px; }
+  .val-field { background: var(--light); padding: 16px 18px; }
+  .val-field label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
+    display: block; margin-bottom: 8px;
+  }
+  .val-field input {
+    width: 100%; background: transparent; border: none;
+    border-bottom: 1px solid var(--border); padding: 4px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .val-field input:focus { border-bottom-color: var(--warm); }
+  .val-field input::placeholder { color: var(--border); }
+
+  /* ── SEÇÃO FINAL ── */
+  .final-section {
+    background: var(--ink); padding: 80px 32px; text-align: center;
+  }
+  .final-inner { max-width: 600px; margin: 0 auto; }
+  .final-tag {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--warm); margin-bottom: 24px;
+  }
+  .final-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3.5vw, 28px); font-weight: 400; font-style: italic;
+    color: var(--paper); line-height: 1.5;
+  }
+  .final-quote strong { font-style: normal; font-weight: 700; color: var(--gold); }
+  .final-sub { font-size: 12px; color: rgba(245,240,232,0.3); margin-top: 40px; letter-spacing: 2px; }
+  .cover-line { width: 60px; height: 1px; background: rgba(200,169,110,0.3); margin: 40px auto 0; }
+
+  /* ── ANIMAÇÕES ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse { 0%,100%{opacity:0.35} 50%{opacity:0.8} }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVO ── */
+  @media (max-width: 600px) {
+    .wheel-controls { grid-template-columns: 1fr; }
+    .org-grid { grid-template-columns: 1fr; }
+    .criterio-registro { grid-template-columns: 1fr; }
+    .val-fields { grid-template-columns: 1fr; }
+    .evidencias-grid { grid-template-columns: 1fr 1fr; }
+    .prio-grid { flex-direction: column; }
+    .nav-index { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<section class="cover">
+  <div class="cover-texture"></div>
+  <div class="cover-content">
+    <p class="cover-label">Caderno 1 · I.P.E.M · Ordenismo</p>
+    <h1 class="cover-caderno">I<span>.</span></h1>
+    <p class="cover-name">Intelecto</p>
+    <p class="cover-principle">"Antes de mudar a vida, eu encaro a minha vida."</p>
+    <p class="cover-scroll">Comece aqui</p>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="nav-index">
+  <div class="nav-inner">
+    <a class="nav-pill" href="#i00">I-00 Roda da Vida</a>
+    <a class="nav-pill" href="#i01">I-01 Dump Mental</a>
+    <a class="nav-pill" href="#i02">I-02 Organização</a>
+    <a class="nav-pill" href="#i03">I-03 Critério</a>
+    <a class="nav-pill" href="#i04">I-04 Foco</a>
+    <a class="nav-pill" href="#revisao">Revisão</a>
+    <a class="nav-pill" href="#evidencias">Evidências</a>
+  </div>
+</nav>
+
+<!-- I-00 RODA DA VIDA -->
+<section class="section reveal" id="i00">
+  <div class="section-num">I-00</div>
+  <p class="section-tag">Mapa de Realidade</p>
+  <h2 class="section-title">Roda da Vida.<br><em>Onde você está de verdade.</em></h2>
+  <p class="lead">Não avalie pelo que você quer ser. Avalie pelo que você vive. De 0 a 10 — 0 é colapso, 10 é excelência sustentável.</p>
+
+  <div class="wheel-wrap">
+    <canvas id="wheel-canvas" width="420" height="420"></canvas>
+
+    <div class="wheel-controls" id="wheel-controls">
+      <!-- gerado por JS -->
+    </div>
+  </div>
+
+  <div class="highlight">
+    Clique e arraste os sliders. A roda atualiza em tempo real.
+  </div>
+
+  <!-- Leitura da Roda -->
+  <p class="section-tag" style="margin-top:40px">Leitura da Roda</p>
+  <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:20px;">Depois de preencher, responda:</h3>
+
+  <div class="roda-leitura">
+    <div class="roda-leitura-item">
+      <div class="roda-q-num">1</div>
+      <div class="roda-q-body">
+        <p class="roda-q-label">Minha área mais fraca é:</p>
+        <input class="roda-q-input" type="text" placeholder="Seja honesto..."/>
+      </div>
+    </div>
+    <div class="roda-leitura-item">
+      <div class="roda-q-num">2</div>
+      <div class="roda-q-body">
+        <p class="roda-q-label">Minha área mais forte é:</p>
+        <input class="roda-q-input" type="text" placeholder=""/>
+      </div>
+    </div>
+    <div class="roda-leitura-item">
+      <div class="roda-q-num">3</div>
+      <div class="roda-q-body">
+        <p class="roda-q-label">A que mais me sabota é:</p>
+        <input class="roda-q-input" type="text" placeholder=""/>
+      </div>
+    </div>
+    <div class="roda-leitura-item">
+      <div class="roda-q-num">4</div>
+      <div class="roda-q-body">
+        <p class="roda-q-label">A que ignoro é:</p>
+        <input class="roda-q-input" type="text" placeholder=""/>
+      </div>
+    </div>
+    <div class="roda-leitura-item">
+      <div class="roda-q-num">5</div>
+      <div class="roda-q-body">
+        <p class="roda-q-label">A que finjo que está bem é:</p>
+        <input class="roda-q-input" type="text" placeholder=""/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Área Mestra -->
+  <div class="area-mestra-block">
+    <span class="area-mestra-label">Área Mestra — próximos 30 dias</span>
+    <p class="area-mestra-question">"Se eu organizasse só uma área agora, qual destravaria o resto?"</p>
+    <input class="area-mestra-input" type="text" placeholder="Escreva aqui..."/>
+  </div>
+</section>
+
+<!-- I-01 DUMP MENTAL -->
+<section class="section reveal" id="i01">
+  <div class="section-num">I-01</div>
+  <p class="section-tag">Esvaziamento</p>
+  <h2 class="section-title">Dump Mental.<br><em>Tire o que está pesando.</em></h2>
+  <p class="lead">Escreva tudo que está na sua cabeça. Sem organizar, sem julgar, sem censura. A única regra é não parar no meio.</p>
+
+  <div class="dump-rules">
+    <div class="dump-rule no">❌ Não organizar</div>
+    <div class="dump-rule no">❌ Não julgar</div>
+    <div class="dump-rule yes">✔ Só escrever</div>
+  </div>
+
+  <textarea class="dump-area" placeholder="Comece aqui. Escreva tudo — medos, pensamentos, angústias, ideias, tudo que vier. Não precisa fazer sentido..."></textarea>
+</section>
+
+<!-- I-02 ORGANIZAÇÃO -->
+<section class="section reveal" id="i02">
+  <div class="section-num">I-02</div>
+  <p class="section-tag">Clareza Estruturada</p>
+  <h2 class="section-title">Organização.<br><em>Transforme caos em mapa.</em></h2>
+  <p class="lead">Pegue o que saiu no Dump Mental e classifique nos quatro blocos abaixo. Reescreva com calma.</p>
+
+  <div class="org-grid">
+    <div class="org-block">
+      <div class="org-block-title"><span>⚠️</span> Problemas</div>
+      <textarea class="org-textarea" placeholder="Liste os problemas reais..."></textarea>
+    </div>
+    <div class="org-block">
+      <div class="org-block-title"><span>💡</span> Ideias</div>
+      <textarea class="org-textarea" placeholder="O que surgiu de positivo..."></textarea>
+    </div>
+    <div class="org-block">
+      <div class="org-block-title"><span>😨</span> Medos</div>
+      <textarea class="org-textarea" placeholder="O que te paralisa..."></textarea>
+    </div>
+    <div class="org-block">
+      <div class="org-block-title"><span>📋</span> Pendências</div>
+      <textarea class="org-textarea" placeholder="O que está em aberto..."></textarea>
+    </div>
+  </div>
+
+  <p class="section-tag" style="margin-top:32px">Priorização</p>
+  <p class="body-text">Agora, distribua o que listou entre as três categorias:</p>
+
+  <div class="prio-grid">
+    <div class="prio-card urgente">
+      <div class="prio-icon">🔥</div>
+      <div class="prio-label">Urgente</div>
+      <textarea class="prio-textarea" placeholder="Precisa de ação imediata..."></textarea>
+    </div>
+    <div class="prio-card importante">
+      <div class="prio-icon">⚙️</div>
+      <div class="prio-label">Importante</div>
+      <textarea class="prio-textarea" placeholder="Não é urgente, mas é essencial..."></textarea>
+    </div>
+    <div class="prio-card espera">
+      <div class="prio-icon">⏳</div>
+      <div class="prio-label">Pode esperar</div>
+      <textarea class="prio-textarea" placeholder="Por enquanto, fica em pausa..."></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- I-03 CRITÉRIO DE DECISÃO -->
+<section class="section reveal" id="i03">
+  <div class="section-num">I-03</div>
+  <p class="section-tag">Filtro Mental</p>
+  <h2 class="section-title">Critério de Decisão.<br><em>Pare de decidir no impulso.</em></h2>
+  <p class="lead">Para cada decisão importante, aplique o filtro abaixo. Ele existe para te impedir de sair da Área Mestra.</p>
+
+  <div class="criterio-pergunta">
+    <p>"Isso me aproxima ou me afasta da minha Área Mestra?"</p>
+  </div>
+
+  <div class="criterio-opcoes">
+    <div class="criterio-opt aproxima" onclick="selectCriterio(this)">
+      <div class="criterio-opt-icon">✔</div>
+      <div class="criterio-opt-label">Aproxima</div>
+    </div>
+    <div class="criterio-opt afasta" onclick="selectCriterio(this)">
+      <div class="criterio-opt-icon">❌</div>
+      <div class="criterio-opt-label">Afasta — pausa</div>
+    </div>
+    <div class="criterio-opt neutro" onclick="selectCriterio(this)">
+      <div class="criterio-opt-icon">⚠️</div>
+      <div class="criterio-opt-label">Neutro</div>
+    </div>
+  </div>
+
+  <div class="criterio-registro">
+    <div class="criterio-field">
+      <label>Decisão</label>
+      <input type="text" placeholder="Descreva a decisão..."/>
+    </div>
+    <div class="criterio-field">
+      <label>Motivo</label>
+      <input type="text" placeholder="Por que essa escolha?"/>
+    </div>
+  </div>
+</section>
+
+<!-- I-04 FOCO DIRECIONADO -->
+<section class="section reveal" id="i04">
+  <div class="section-num">I-04</div>
+  <p class="section-tag">Plano de Concentração</p>
+  <h2 class="section-title">Foco Direcionado.<br><em>30 dias. Uma direção.</em></h2>
+  <p class="lead">Dispersão é o maior inimigo da construção. Declare onde você vai colocar sua energia — e o que vai pausar pra isso.</p>
+
+  <div class="foco-declaracao">
+    <label>Declaração de Foco — próximos 30 dias</label>
+    <textarea placeholder="Nos próximos 30 dias, meu foco principal é..."></textarea>
+  </div>
+
+  <p class="section-tag" style="margin-top:32px">Compromissos-Chave</p>
+  <p class="body-text">Máximo 3. Se você listou mais, você não entendeu a proposta.</p>
+
+  <div class="compromissos-list">
+    <div class="compromisso-item">
+      <div class="comp-num">1</div>
+      <input class="comp-input" type="text" placeholder="Primeiro compromisso..."/>
+    </div>
+    <div class="compromisso-item">
+      <div class="comp-num">2</div>
+      <input class="comp-input" type="text" placeholder="Segundo compromisso..."/>
+    </div>
+    <div class="compromisso-item">
+      <div class="comp-num">3</div>
+      <input class="comp-input" type="text" placeholder="Terceiro compromisso..."/>
+    </div>
+  </div>
+
+  <div class="renuncias-block">
+    <label>Renúncias — o que vou pausar</label>
+    <div class="renuncia-item">
+      <input class="renuncia-input" type="text" placeholder="O que fica em pausa..."/>
+    </div>
+    <div class="renuncia-item">
+      <input class="renuncia-input" type="text" placeholder="O que fica em pausa..."/>
+    </div>
+    <div class="renuncia-item">
+      <input class="renuncia-input" type="text" placeholder="O que fica em pausa..."/>
+    </div>
+  </div>
+</section>
+
+<!-- REVISÃO MENSAL -->
+<section class="section reveal" id="revisao">
+  <div class="section-num">R</div>
+  <p class="section-tag">Autoauditoria</p>
+  <h2 class="section-title">Revisão Mensal.<br><em>Aprendizado consciente.</em></h2>
+  <p class="lead">Após 30 dias, sente e responda com honestidade. Sem essa etapa, o crescimento vira ilusão.</p>
+
+  <div class="revisao-list">
+    <div class="revisao-item">
+      <div class="rev-num">1</div>
+      <div class="rev-body">
+        <p class="rev-q">O que clareou?</p>
+        <textarea class="rev-input" placeholder="O que ficou mais nítido nesse período..."></textarea>
+      </div>
+    </div>
+    <div class="revisao-item">
+      <div class="rev-num">2</div>
+      <div class="rev-body">
+        <p class="rev-q">O que continuei evitando?</p>
+        <textarea class="rev-input" placeholder="Seja honesto — o que você driblou..."></textarea>
+      </div>
+    </div>
+    <div class="revisao-item">
+      <div class="rev-num">3</div>
+      <div class="rev-body">
+        <p class="rev-q">Que decisão mudou meu jogo?</p>
+        <textarea class="rev-input" placeholder="A virada do período..."></textarea>
+      </div>
+    </div>
+    <div class="revisao-item">
+      <div class="rev-num">4</div>
+      <div class="rev-body">
+        <p class="rev-q">Onde falhei comigo?</p>
+        <textarea class="rev-input" placeholder="Sem autocomiseração — só realidade..."></textarea>
+      </div>
+    </div>
+    <div class="revisao-item">
+      <div class="rev-num">5</div>
+      <div class="rev-body">
+        <p class="rev-q">O que aprendi?</p>
+        <textarea class="rev-input" placeholder="A síntese do período..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVIDÊNCIAS -->
+<section class="section reveal" id="evidencias">
+  <div class="section-num">E</div>
+  <p class="section-tag">Prova de Execução</p>
+  <h2 class="section-title">Evidências.<br><em>Sem prova, não existiu.</em></h2>
+  <p class="lead">O Caderno I só está concluído quando tem evidência real. O método não aceita autoengano.</p>
+
+  <div class="evidencias-grid">
+    <div class="ev-card"><div class="ev-icon">📸</div><div class="ev-label">Fotos</div></div>
+    <div class="ev-card"><div class="ev-icon">📄</div><div class="ev-label">Documentos</div></div>
+    <div class="ev-card"><div class="ev-icon">🖥️</div><div class="ev-label">Prints</div></div>
+    <div class="ev-card"><div class="ev-icon">📝</div><div class="ev-label">Relatos</div></div>
+    <div class="ev-card"><div class="ev-icon">✅</div><div class="ev-label">Decisões</div></div>
+    <div class="ev-card"><div class="ev-icon">📊</div><div class="ev-label">Registros</div></div>
+  </div>
+
+  <div class="ev-final">
+    <label>Pergunta Final</label>
+    <p class="ev-final-q">"O que prova que eu mudei?"</p>
+    <textarea placeholder="Descreva as evidências concretas da sua transformação neste caderno..."></textarea>
+  </div>
+
+  <!-- VALIDAÇÃO -->
+  <p class="section-tag" style="margin-top:40px">Validação do Facilitador</p>
+
+  <div class="validacao-block">
+    <div class="validacao-checks">
+      <div class="val-check aprovado" onclick="selectVal(this)">
+        <div class="val-check-icon">☐</div>
+        <div class="val-check-label">Aprovado</div>
+      </div>
+      <div class="val-check ajustar" onclick="selectVal(this)">
+        <div class="val-check-icon">☐</div>
+        <div class="val-check-label">Ajustar</div>
+      </div>
+      <div class="val-check reaplicar" onclick="selectVal(this)">
+        <div class="val-check-icon">☐</div>
+        <div class="val-check-label">Reaplicar</div>
+      </div>
+    </div>
+    <div class="val-fields">
+      <div class="val-field">
+        <label>Assinatura do Facilitador</label>
+        <input type="text" placeholder="Nome e assinatura"/>
+      </div>
+      <div class="val-field">
+        <label>Data</label>
+        <input type="text" placeholder="__ / __ / ____"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final-section reveal">
+  <div class="final-inner">
+    <p class="final-tag">Caderno I — Concluído</p>
+    <p class="final-quote">
+      "Antes de mudar a vida,<br>
+      <strong>eu encarei a minha vida."</strong>
+    </p>
+    <div class="cover-line"></div>
+    <p class="final-sub">I.P.E.M · Caderno I · Intelecto · Ordenismo</p>
+  </div>
+</section>
+
+<script>
+/* ── DADOS DA RODA ── */
+const areas = [
+  { key: 'intelectual',   label: 'Intelectual',         grupo: 'Pessoal',           cor: '#8b3a2a' },
+  { key: 'emocional',     label: 'Emocional',           grupo: 'Pessoal',           cor: '#8b3a2a' },
+  { key: 'trabalho',      label: 'Trabalho',            grupo: 'Profissional',      cor: '#c8a96e' },
+  { key: 'financeiro',    label: 'Financeiro',          grupo: 'Profissional',      cor: '#c8a96e' },
+  { key: 'social',        label: 'Rel. Sociais',        grupo: 'Relacionamentos',   cor: '#5a7a5a' },
+  { key: 'familia',       label: 'Família',             grupo: 'Relacionamentos',   cor: '#5a7a5a' },
+  { key: 'saude',         label: 'Saúde',               grupo: 'Qualidade de Vida', cor: '#3a6a7a' },
+  { key: 'espiritualidade', label: 'Espiritualidade',   grupo: 'Qualidade de Vida', cor: '#3a6a7a' },
+];
+
+const scores = {};
+areas.forEach(a => scores[a.key] = 5);
+
+/* ── CONSTRÓI OS CONTROLES ── */
+const ctrl = document.getElementById('wheel-controls');
+areas.forEach(a => {
+  const div = document.createElement('div');
+  div.className = 'wheel-item';
+  div.innerHTML = `
+    <div class="wheel-item-header">
+      <div>
+        <div class="wheel-item-group">${a.grupo}</div>
+        <div class="wheel-item-name">${a.label}</div>
+      </div>
+      <div class="wheel-score-display" id="score-${a.key}">5</div>
+    </div>
+    <input class="wheel-slider" type="range" min="0" max="10" step="1" value="5"
+      style="accent-color:${a.cor}"
+      oninput="updateScore('${a.key}', this.value)"/>
+  `;
+  ctrl.appendChild(div);
+});
+
+/* ── UPDATE ── */
+function updateScore(key, val) {
+  scores[key] = parseInt(val);
+  document.getElementById('score-' + key).textContent = val;
+  drawWheel();
+}
+
+/* ── DESENHA A RODA ── */
+const canvas = document.getElementById('wheel-canvas');
+const ctx = canvas.getContext('2d');
+const cx = 210, cy = 210, R = 185, n = 8;
+
+function drawWheel() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const sliceAngle = (Math.PI * 2) / n;
+  const startOffset = -Math.PI / 2;
+
+  // Fundo grade
+  for (let ring = 1; ring <= 10; ring++) {
+    const r = (R * ring) / 10;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = ring === 10 ? 'rgba(26,23,19,0.15)' : 'rgba(26,23,19,0.06)';
+    ctx.lineWidth = ring === 10 ? 1.5 : 0.5;
+    ctx.stroke();
+  }
+
+  // Linhas divisórias
+  for (let i = 0; i < n; i++) {
+    const angle = startOffset + i * sliceAngle;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * R, cy + Math.sin(angle) * R);
+    ctx.strokeStyle = 'rgba(26,23,19,0.1)';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  }
+
+  // Área preenchida
+  ctx.beginPath();
+  areas.forEach((a, i) => {
+    const angle = startOffset + i * sliceAngle + sliceAngle / 2;
+    const r = (R * scores[a.key]) / 10;
+    if (i === 0) ctx.moveTo(cx + Math.cos(startOffset + sliceAngle / 2) * r, cy + Math.sin(startOffset + sliceAngle / 2) * r);
+    ctx.lineTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(200,169,110,0.22)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(200,169,110,0.7)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Pontos nos vértices
+  areas.forEach((a, i) => {
+    const angle = startOffset + i * sliceAngle + sliceAngle / 2;
+    const r = (R * scores[a.key]) / 10;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r, 4, 0, Math.PI * 2);
+    ctx.fillStyle = a.cor;
+    ctx.fill();
+  });
+
+  // Labels
+  areas.forEach((a, i) => {
+    const angle = startOffset + i * sliceAngle + sliceAngle / 2;
+    const labelR = R + 22;
+    const lx = cx + Math.cos(angle) * labelR;
+    const ly = cy + Math.sin(angle) * labelR;
+
+    ctx.font = '500 11px "DM Sans", sans-serif';
+    ctx.fillStyle = '#1a1713';
+    ctx.textAlign = lx > cx + 5 ? 'left' : lx < cx - 5 ? 'right' : 'center';
+    ctx.textBaseline = ly > cy + 5 ? 'top' : ly < cy - 5 ? 'bottom' : 'middle';
+
+    // Score badge
+    const scoreR = R - 16;
+    const sx = cx + Math.cos(angle) * scoreR;
+    const sy = cy + Math.sin(angle) * scoreR;
+    if (scores[a.key] > 0) {
+      ctx.font = 'bold 10px "DM Sans", sans-serif';
+      ctx.fillStyle = a.cor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(scores[a.key], sx, sy);
+    }
+
+    // Label
+    ctx.font = '500 11px "DM Sans", sans-serif';
+    ctx.fillStyle = '#1a1713';
+    ctx.textAlign = lx > cx + 5 ? 'left' : lx < cx - 5 ? 'right' : 'center';
+    ctx.textBaseline = ly > cy + 5 ? 'top' : ly < cy - 5 ? 'bottom' : 'middle';
+    ctx.fillText(a.label, lx, ly);
+  });
+
+  // Centro
+  ctx.beginPath();
+  ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(26,23,19,0.3)';
+  ctx.fill();
+}
+
+drawWheel();
+
+/* ── CRITÉRIO SELEÇÃO ── */
+function selectCriterio(el) {
+  document.querySelectorAll('.criterio-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+/* ── VALIDAÇÃO SELEÇÃO ── */
+function selectVal(el) {
+  document.querySelectorAll('.val-check').forEach(o => {
+    o.classList.remove('selected');
+    o.querySelector('.val-check-icon').textContent = '☐';
+  });
+  el.classList.add('selected');
+  el.querySelector('.val-check-icon').textContent = '☑';
+}
+
+/* ── REVEAL ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
