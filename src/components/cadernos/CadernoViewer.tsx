@@ -20,7 +20,6 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
 
   const isReadOnly = status === 'aprovado' || status === 'aguardando_aprovacao'
 
-  // Quando o iframe carrega, injeta os dados salvos
   useEffect(() => {
     const iframe = iframeRef.current
     if (!iframe) return
@@ -30,28 +29,44 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
         const doc = iframe.contentDocument
         if (!doc) return
 
-        // Aguarda o JS do caderno executar (roda da vida etc)
         setTimeout(() => {
-          // Preenche inputs de texto e textareas
+          // ── Esconder seção de validação do facilitador ──
+          // O membro não deve ver nem interagir com essa parte
+          const validacaoBlock = doc.querySelector('.validacao-block') as HTMLElement
+          if (validacaoBlock) validacaoBlock.style.display = 'none'
+
+          // Esconder o título "Validação do Facilitador"
+          doc.querySelectorAll('.section-tag').forEach(el => {
+            if (el.textContent?.includes('Validação')) {
+              (el as HTMLElement).style.display = 'none'
+            }
+          })
+
+          // Esconder checkboxes de aprovação/ajustar/reaplicar
+          doc.querySelectorAll('.validacao-checks, .val-check, .val-fields').forEach(el => {
+            (el as HTMLElement).style.display = 'none'
+          })
+
+          // ── Preencher inputs de texto e textareas ──
           const inputs = doc.querySelectorAll<HTMLInputElement>('input:not([type="range"])')
           const textareas = doc.querySelectorAll<HTMLTextAreaElement>('textarea')
           const sliders = doc.querySelectorAll<HTMLInputElement>('input[type="range"]')
 
-          // Atribui IDs sequenciais
+          // Atribui IDs sequenciais a campos sem ID
           inputs.forEach((el, i) => { if (!el.id) el.id = `inp_${i}` })
           textareas.forEach((el, i) => { if (!el.id) el.id = `ta_${i}` })
 
           // Restaura valores salvos
-          inputs.forEach((el) => {
+          inputs.forEach(el => {
             const val = respostas[el.id]
             if (val !== undefined) el.value = String(val)
           })
-          textareas.forEach((el) => {
+          textareas.forEach(el => {
             const val = respostas[el.id]
             if (val !== undefined) el.value = String(val)
           })
 
-          // Restaura sliders e atualiza a roda
+          // Restaura sliders e dispara evento para atualizar a roda
           sliders.forEach((el, i) => {
             const key = `slider_${i}`
             if (respostas[key] !== undefined) {
@@ -62,7 +77,9 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
 
           // Se read-only, desabilita todos os campos
           if (isReadOnly) {
-            doc.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach(el => {
+            doc.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+              'input, textarea'
+            ).forEach(el => {
               el.disabled = true
               el.style.opacity = '0.6'
               el.style.cursor = 'not-allowed'
@@ -91,17 +108,14 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
 
       const data: Record<string, string | number> = {}
 
-      // Coleta inputs de texto
       doc.querySelectorAll<HTMLInputElement>('input:not([type="range"])').forEach(el => {
         if (el.id) data[el.id] = el.value
       })
 
-      // Coleta textareas
       doc.querySelectorAll<HTMLTextAreaElement>('textarea').forEach(el => {
         if (el.id) data[el.id] = el.value
       })
 
-      // Coleta sliders
       doc.querySelectorAll<HTMLInputElement>('input[type="range"]').forEach((el, i) => {
         data[`slider_${i}`] = Number(el.value)
       })
@@ -133,7 +147,7 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#0f0e0b' }}>
 
-      {/* Barra superior flutuante */}
+      {/* Barra superior */}
       <div style={{
         background: '#1a1713',
         borderBottom: '1px solid rgba(212,168,67,0.15)',
@@ -145,7 +159,6 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
         flexShrink: 0,
       }}>
 
-        {/* Voltar */}
         <button
           onClick={() => router.push('/membro')}
           style={{
@@ -158,22 +171,20 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
           Voltar
         </button>
 
-        {/* Info */}
         <div style={{ flex: 1 }}>
           <span style={{
-            fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase',
-            color: '#c8a96e',
+            fontSize: '11px', letterSpacing: '3px',
+            textTransform: 'uppercase', color: '#c8a96e',
           }}>
             Caderno {numero} · I.P.E.M
           </span>
         </div>
 
-        {/* Status badge */}
         {status === 'aguardando_aprovacao' && (
           <span style={{
             fontSize: '11px', padding: '4px 10px', borderRadius: '100px',
             background: 'rgba(200,169,110,0.1)', border: '1px solid rgba(200,169,110,0.25)',
-            color: '#c8a96e', letterSpacing: '1px',
+            color: '#c8a96e',
           }}>
             ⏳ Aguardando avaliação
           </span>
@@ -183,7 +194,7 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
           <span style={{
             fontSize: '11px', padding: '4px 10px', borderRadius: '100px',
             background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.3)',
-            color: '#d4a843', letterSpacing: '1px',
+            color: '#d4a843',
           }}>
             ✅ Aprovado
           </span>
@@ -199,7 +210,6 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
           </span>
         )}
 
-        {/* Botões de ação */}
         {!isReadOnly && (
           <>
             <button
@@ -214,7 +224,7 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
                 opacity: loading || !iframeReady ? 0.5 : 1,
               }}
             >
-              {loading ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
+              {loading ? <Loader2 size={13} /> : <Save size={13} />}
               Salvar
             </button>
 
@@ -230,14 +240,13 @@ export default function CadernoViewer({ numero, respostas, status }: Props) {
                 opacity: loading || !iframeReady ? 0.5 : 1,
               }}
             >
-              {loading ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
+              {loading ? <Loader2 size={13} /> : <Send size={13} />}
               Enviar para aprovação
             </button>
           </>
         )}
       </div>
 
-      {/* iframe com o caderno original */}
       <iframe
         ref={iframeRef}
         src={`/cadernos/caderno-${numero}.html`}
