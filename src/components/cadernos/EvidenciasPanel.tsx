@@ -314,7 +314,7 @@ export default function EvidenciasPanel({ questionarioId, readOnly = false }: Pr
               }}>
                 {/* Preview de imagem */}
                 {isImage && (
-                  
+                  <a
                     href={'/api/evidencias/view?url=' + encodeURIComponent(ev.arquivo_url)}
                     target="_blank"
                     rel="noreferrer"
