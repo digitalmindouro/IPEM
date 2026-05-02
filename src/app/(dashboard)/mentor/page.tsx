@@ -28,9 +28,11 @@ export default async function MentorPage() {
     `)
     .order('created_at', { ascending: false })
 
-  const { data: turmas } = rolesQueVeemTudo.includes(profile?.role)
+  const turmasResult = rolesQueVeemTudo.includes(profile?.role)
     ? await turmasQuery
     : await turmasQuery.eq('responsavel_id', user.id)
+  console.log('TURMAS ERROR:', turmasResult.error)
+  const turmas = turmasResult.data
 
   // Buscar todos os questionários dos membros dessas turmas
   const membroIds = turmas?.flatMap(t => t.membros_turma?.map((m: any) => m.membro_id) ?? []) ?? []
@@ -49,6 +51,8 @@ export default async function MentorPage() {
     .eq('role', 'membro')
     .order('nome')
 
+  console.log('TURMAS:', JSON.stringify(turmas?.map(t => t.nome)))
+  console.log('PROFILE ROLE:', profile?.role)
   return (
     <MentorDashboard
       profile={profile}

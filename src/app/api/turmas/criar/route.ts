@@ -85,3 +85,26 @@ export async function GET() {
     return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+    if (!id) return NextResponse.json({ error: 'ID obrigatório' }, { status: 400 })
+
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    const rolesPermitidos = ['mentor', 'guardiao', 'ordenista']
+    if (!profile || !rolesPermitidos.includes(profile.role)) {
+      return NextResponse.json({ error: 'Sem permissão' }, { status: 403 })
+    }
+
+    await supabase.from('turmas').delete().eq('id', id)
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
+  }
+}
