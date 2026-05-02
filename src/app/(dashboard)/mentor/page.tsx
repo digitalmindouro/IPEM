@@ -14,7 +14,8 @@ export default async function MentorPage() {
     .single()
 
   // Buscar turmas do mentor com membros e progresso
-  const { data: turmas } = await supabase
+  const rolesQueVeemTudo = ['guardiao', 'ordenista']
+  const turmasQuery = supabase
     .from('turmas')
     .select(`
       *,
@@ -23,8 +24,11 @@ export default async function MentorPage() {
         membro:profiles!membro_id(id, nome, email, role)
       )
     `)
-    .eq('responsavel_id', user.id)
     .order('created_at', { ascending: false })
+
+  const { data: turmas } = rolesQueVeemTudo.includes(profile?.role)
+    ? await turmasQuery
+    : await turmasQuery.eq('responsavel_id', user.id)
 
   // Buscar todos os questionários dos membros dessas turmas
   const membroIds = turmas?.flatMap(t => t.membros_turma?.map((m: any) => m.membro_id) ?? []) ?? []
