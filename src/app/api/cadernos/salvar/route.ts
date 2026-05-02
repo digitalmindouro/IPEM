@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { numero_caderno, respostas, acao } = body
+    const { numero_caderno, respostas, status: statusParam, acao } = body
 
     if (!numero_caderno || !respostas) {
       return NextResponse.json({ error: 'Dados incompletos' }, { status: 400 })
@@ -33,7 +33,9 @@ export async function POST(request: Request) {
       )
     }
 
-    const novoStatus = acao === 'enviar' ? 'aguardando_aprovacao' : 'em_andamento'
+    const novoStatus = statusParam ?? (acao === 'enviar' ? 'aguardando_aprovacao' : 'em_andamento')
+
+    let questionarioId: string
 
     if (existente) {
       // Atualizar existente
@@ -47,25 +49,30 @@ export async function POST(request: Request) {
         .eq('id', existente.id)
 
       if (error) throw error
+      questionarioId = existente.id
     } else {
       // Criar novo
-      const { error } = await supabase
+      const { data: novo, error } = await supabase
         .from('questionarios')
         .insert({
           membro_id: user.id,
           numero_caderno,
           respostas,
           status: novoStatus,
-          turma_id: null, // será preenchido quando o membro tiver turma
+          turma_id: null,
         })
+        .select('id')
+        .single()
 
       if (error) throw error
+      questionarioId = novo.id
     }
 
     return NextResponse.json({
       success: true,
       status: novoStatus,
-      message: acao === 'enviar'
+      questionario: { id: questionarioId },
+      message: novoStatus === 'aguardando_aprovacao'
         ? 'Caderno enviado para aprovação!'
         : 'Progresso salvo com sucesso.',
     })
