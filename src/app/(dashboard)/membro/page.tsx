@@ -128,7 +128,7 @@ export default async function MembroPage() {
             </div>
           )
           return isClickable
-            ? <Link key={num} href={`/membro/cadernos/${num}`}>{inner}</Link>
+            ? <a key={num} href={`/membro/cadernos/${num}`}>{inner}</a>
             : <div key={num}>{inner}</div>
         })}
       </div>
