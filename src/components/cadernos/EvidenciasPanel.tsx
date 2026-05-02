@@ -320,7 +320,7 @@ export default function EvidenciasPanel({ questionarioId, readOnly = false }: Pr
                       background: `url(${ev.arquivo_url}) center/cover no-repeat`,
                       cursor: 'pointer',
                     }}
-                    onClick={() => window.open(ev.arquivo_url!, '_blank')}
+                    onClick={() => window.open(ev.arquivo_url + '?download=false', '_blank')}
                   />
                 )}
 
