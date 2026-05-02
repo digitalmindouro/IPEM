@@ -37,13 +37,14 @@ export default async function CadernoPage({ params }: Props) {
     .eq('numero_caderno', numero)
     .single()
 
-  const respostas = (questionario?.respostas as Record<string, string | number>) ?? {}
-  const status = (questionario?.status as StatusCaderno) ?? 'disponivel'
+  const respostasIniciais = (questionario?.respostas as Record<string, string | number>) ?? {}
+  const status = (questionario?.status as StatusCaderno) ?? 'em_andamento'
 
   return (
     <CadernoViewer
-      numero={numero}
-      respostas={respostas}
+      numero={numero as CadernoNumero}
+      questionarioId={questionario?.id ?? null}
+      respostasIniciais={respostasIniciais}
       status={status}
     />
   )
