@@ -5,12 +5,10 @@ export async function POST(request: Request) {
   try {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-
     if (!user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    // Verificar se tem permissão para validar
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
@@ -34,7 +32,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Decisão inválida.' }, { status: 400 })
     }
 
-    // Verificar que o questionário existe e está aguardando aprovação
     const { data: questionario } = await supabase
       .from('questionarios')
       .select('*')
@@ -52,8 +49,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Atualizar status do questionário
-    const novoStatus = decisao // 'aprovado' | 'ajustar' | 'reaplicar'
+    const novoStatus = decisao
     const { error: updateError } = await supabase
       .from('questionarios')
       .update({
@@ -65,32 +61,60 @@ export async function POST(request: Request) {
 
     if (updateError) throw updateError
 
-    // Salvar registro da aprovação
     await supabase.from('aprovacoes').insert({
       questionario_id,
       validador_id: user.id,
       decisao,
       observacao: observacao || null,
-    }).select()
-    // Ignora erro se a tabela não existir ainda
+    })
+
+    // Disparar notificação para o membro
+    const mensagensNotif: Record<string, string> = {
+      aprovado: `✅ Seu Caderno ${questionario.numero_caderno} foi aprovado! O próximo foi desbloqueado.`,
+      ajustar: `⚠️ Seu Caderno ${questionario.numero_caderno} precisa de ajustes. Veja a observação do facilitador.`,
+      reaplicar: `🔄 Seu Caderno ${questionario.numero_caderno} precisa ser reaplicado. Veja a observação do facilitador.`,
+    }
+
+    await supabase.from('notificacoes').insert({
+      destinatario_id: questionario.membro_id,
+      tipo: `caderno_${decisao}`,
+      mensagem: mensagensNotif[decisao],
+      link: `/membro/cadernos/${questionario.numero_caderno}`,
+    })
+
+    // Notificar o mentor da turma se houver
+    if (questionario.turma_id) {
+      const { data: turma } = await supabase
+        .from('turmas')
+        .select('responsavel_id, nome')
+        .eq('id', questionario.turma_id)
+        .single()
+
+      if (turma && turma.responsavel_id !== user.id) {
+        const { data: membroProfile } = await supabase
+          .from('profiles')
+          .select('nome')
+          .eq('id', questionario.membro_id)
+          .single()
+
+        await supabase.from('notificacoes').insert({
+          destinatario_id: turma.responsavel_id,
+          tipo: `mentor_caderno_${decisao}`,
+          mensagem: `${membroProfile?.nome ?? 'Membro'} teve o Caderno ${questionario.numero_caderno} ${decisao === 'aprovado' ? 'aprovado' : decisao === 'ajustar' ? 'para ajuste' : 'para reaplicar'}.`,
+          link: `/mentor`,
+        })
+      }
+    }
 
     const mensagens: Record<string, string> = {
-      aprovado: 'Caderno aprovado com sucesso! O próximo foi desbloqueado.',
+      aprovado: 'Caderno aprovado com sucesso!',
       ajustar: 'Membro notificado para revisar o caderno.',
       reaplicar: 'Membro notificado para reaplicar o caderno.',
     }
 
-    return NextResponse.json({
-      success: true,
-      decisao,
-      message: mensagens[decisao],
-    })
-
+    return NextResponse.json({ success: true, decisao, message: mensagens[decisao] })
   } catch (error) {
     console.error('Erro ao aprovar caderno:', error)
-    return NextResponse.json(
-      { error: 'Erro interno ao processar decisão.' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erro interno ao processar decisão.' }, { status: 500 })
   }
 }
