@@ -31,7 +31,8 @@ export async function POST(request: Request) {
         status: 'ativa',
         data_inicio: data_inicio || null,
         data_fim: data_fim || null,
-        max_membros: max_membros || null,
+        max_membros: max_membros ? Number(max_membros) : 30,
+        ciclo_dias: 90,
         observacoes: observacoes || null,
       })
       .select()
