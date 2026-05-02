@@ -314,14 +314,14 @@ export default function EvidenciasPanel({ questionarioId, readOnly = false }: Pr
               }}>
                 {/* Preview de imagem */}
                 {isImage && (
-                  <div
-                    style={{
-                      width: '100%', height: '120px',
-                      background: `url(${ev.arquivo_url}) center/cover no-repeat`,
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => window.open('/api/evidencias/view?url=' + encodeURIComponent(ev.arquivo_url), '_blank')}
-                  />
+                  
+                    href={'/api/evidencias/view?url=' + encodeURIComponent(ev.arquivo_url)}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ display: 'block', width: '100%', height: '120px', cursor: 'pointer' }}
+                  >
+                    <div style={{ width: '100%', height: '120px', background: `url(${ev.arquivo_url}) center/cover no-repeat` }} />
+                  </a>
                 )}
 
                 <div style={{ padding: '10px 12px' }}>
