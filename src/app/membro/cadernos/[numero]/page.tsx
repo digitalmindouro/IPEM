@@ -15,7 +15,6 @@ export default async function CadernoPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Verificar bloqueio sequencial
   if (numero > 1) {
     const { data: anterior } = await supabase
       .from('questionarios')
@@ -23,18 +22,32 @@ export default async function CadernoPage({ params }: Props) {
       .eq('membro_id', user.id)
       .eq('numero_caderno', numero - 1)
       .single()
-    if (anterior?.status !== 'aprovado') {
-      redirect('/membro')
-    }
+    if (anterior?.status !== 'aprovado') redirect('/membro')
   }
 
-  // Buscar respostas salvas
-  const { data: questionario } = await supabase
+  // Buscar questionário existente
+  let { data: questionario } = await supabase
     .from('questionarios')
     .select('*')
     .eq('membro_id', user.id)
     .eq('numero_caderno', numero)
     .single()
+
+  // Criar automaticamente se não existir
+  if (!questionario) {
+    const { data: novo } = await supabase
+      .from('questionarios')
+      .insert({
+        membro_id: user.id,
+        numero_caderno: numero,
+        respostas: {},
+        status: 'em_andamento',
+        turma_id: null,
+      })
+      .select('*')
+      .single()
+    questionario = novo
+  }
 
   const respostasIniciais = (questionario?.respostas as Record<string, string | number>) ?? {}
   const status = (questionario?.status as StatusCaderno) ?? 'em_andamento'
