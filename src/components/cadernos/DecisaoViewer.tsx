@@ -128,7 +128,7 @@ export default function DecisaoViewer({ questionarioId, numero, membroNome, resp
           <iframe
             ref={iframeRef}
             src={`/cadernos/caderno-${numero}.html`}
-            style={{ width: '100%', height: '75vh', border: 'none', display: 'block' }}
+            style={{ width: '100%', height: '900px', border: 'none', display: 'block' }}
             title={`Caderno ${numero}`}
           />
 
