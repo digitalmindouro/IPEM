@@ -180,7 +180,7 @@ export default function SidebarNav({ profile }: { profile: Profile }) {
             {/* Dropdown notificações */}
             {showNotif && (
               <div style={{
-                position: 'absolute', top: '44px', right: 0,
+                position: 'absolute', top: '44px', left: 0,
                 width: '300px', background: '#1a1713',
                 border: '1px solid rgba(212,168,67,0.15)',
                 borderRadius: '8px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
