@@ -31,7 +31,7 @@ function getNavItems(role: Profile['role']): NavItem[] {
     { href: '/membro', label: 'Meus Cadernos', icon: BookOpen },
   ]
   if (['facilitador', 'mentor', 'guardiao', 'ordenista'].includes(role)) {
-    items.push({ href: '/facilitador', label: 'Minha Turma', icon: Users })
+    items.push({ href: '/facilitador', label: 'Facilitador', icon: Users })
     items.push({ href: '/facilitador/aprovacoes', label: 'Aprovações', icon: CheckSquare })
   }
   if (['mentor', 'guardiao', 'ordenista'].includes(role)) {
