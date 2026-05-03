@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { Users, Award, BarChart2, Shield, ChevronRight, X, Loader2, RefreshCw } from 'lucide-react'
+import { Users, Award, BarChart2, Shield, ChevronRight, X, Loader2, RefreshCw, Download } from 'lucide-react'
 
 interface Profile {
   id: string
@@ -372,7 +372,18 @@ export default function OrdenistaDashboard({
                     {cert.tipo?.replace(/_/g, ' ')} · Código: {cert.codigo_unico} · {new Date(cert.data_emissao).toLocaleDateString('pt-BR')}
                   </p>
                 </div>
-                <p style={{ fontSize: '11px', color: '#7a7060', flexShrink: 0 }}>por {cert.emissor?.nome}</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <p style={{ fontSize: '11px', color: '#7a7060' }}>por {cert.emissor?.nome}</p>
+                
+                  href={`/api/ordenista/certificado/${cert.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={e => e.stopPropagation()}
+                  style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 8px', borderRadius: '4px', background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.2)', color: '#d4a843', fontSize: '11px', textDecoration: 'none' }}
+                >
+                  <Download size={11} /> PDF
+                </a>
+              </div>
               </div>
             ))}
           </div>
