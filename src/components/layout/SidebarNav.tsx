@@ -29,7 +29,6 @@ interface Notificacao {
 function getNavItems(role: Profile['role']): NavItem[] {
   const items: NavItem[] = [
     { href: '/membro', label: 'Meus Cadernos', icon: BookOpen },
-    { href: '/financeiro', label: 'Financeiro', icon: DollarSign },
   ]
   if (['facilitador', 'mentor', 'guardiao', 'ordenista'].includes(role)) {
     items.push({ href: '/facilitador', label: 'Minha Turma', icon: Users })
@@ -42,9 +41,7 @@ function getNavItems(role: Profile['role']): NavItem[] {
   if (['guardiao', 'ordenista'].includes(role)) {
     items.push({ href: '/guardiao', label: 'Guardiões', icon: Award })
   }
-  if (['facilitador', 'mentor', 'guardiao', 'ordenista'].includes(role)) {
-    items.push({ href: '/financeiro', label: 'Financeiro', icon: DollarSign })
-  }
+  items.push({ href: '/financeiro', label: 'Financeiro', icon: DollarSign })
   if (role === 'ordenista') {
     items.push({ href: '/ordenista', label: 'Painel Ordenista', icon: Settings })
   }
