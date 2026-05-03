@@ -36,7 +36,7 @@ function getNavItems(role: Profile['role']): NavItem[] {
     items.push({ href: '/facilitador/aprovacoes', label: 'Aprovações', icon: CheckSquare })
   }
   if (['mentor', 'guardiao', 'ordenista'].includes(role)) {
-    items.push({ href: '/mentor', label: 'Gestão de Turmas', icon: BarChart2 })
+    items.push({ href: '/mentor', label: 'Mentor', icon: BarChart2 })
     items.push({ href: '/mentor/formacao', label: 'Formação', icon: Award })
   }
   if (['guardiao', 'ordenista'].includes(role)) {
