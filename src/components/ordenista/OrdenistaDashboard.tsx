@@ -64,8 +64,7 @@ const PROXIMA_ROLE: Record<string, string> = {
 }
 
 function cadernos4Aprovados(membroId: string, questionarios: Questionario[]) {
-  const aprovados = questionarios.filter(q => q.membro_id === membroId && q.status === 'aprovado')
-  return aprovados.length === 4
+  return questionarios.filter(q => q.membro_id === membroId && q.status === 'aprovado').length === 4
 }
 
 export default function OrdenistaDashboard({
@@ -134,10 +133,10 @@ export default function OrdenistaDashboard({
   })
 
   const gruposPorRole = [
-    { label: 'Membros', role: 'membro', lista: profiles.filter(p => p.role === 'membro'), cor: '#7a7060', icon: Users },
-    { label: 'Facilitadores', role: 'facilitador', lista: profiles.filter(p => p.role === 'facilitador'), cor: '#c8a96e', icon: Users },
-    { label: 'Mentores', role: 'mentor', lista: profiles.filter(p => p.role === 'mentor'), cor: '#d4a843', icon: BarChart2 },
-    { label: 'Guardiões', role: 'guardiao', lista: profiles.filter(p => p.role === 'guardiao'), cor: '#f5f0e8', icon: Shield },
+    { label: 'Membros', role: 'membro', lista: profiles.filter(p => p.role === 'membro'), cor: '#7a7060' },
+    { label: 'Facilitadores', role: 'facilitador', lista: profiles.filter(p => p.role === 'facilitador'), cor: '#c8a96e' },
+    { label: 'Mentores', role: 'mentor', lista: profiles.filter(p => p.role === 'mentor'), cor: '#d4a843' },
+    { label: 'Guardiões', role: 'guardiao', lista: profiles.filter(p => p.role === 'guardiao'), cor: '#f5f0e8' },
   ]
 
   return (
@@ -150,8 +149,10 @@ export default function OrdenistaDashboard({
 
       {/* Abas */}
       <div style={{ display: 'flex', gap: '6px', marginBottom: '28px' }}>
-        {([['visao', 'Visão Geral'], ['pessoas', 'Pessoas'], ['turmas', 'Turmas'], ['certificados', 'Certificados']] as const).map(([key, label]) => (
-          <button key={key} onClick={() => setAba(key)} style={abaStyle(key)}>{label}</button>
+        {(['visao', 'pessoas', 'turmas', 'certificados'] as const).map(key => (
+          <button key={key} onClick={() => setAba(key)} style={abaStyle(key)}>
+            {key === 'visao' ? 'Visão Geral' : key === 'pessoas' ? 'Pessoas' : key === 'turmas' ? 'Turmas' : 'Certificados'}
+          </button>
         ))}
       </div>
 
@@ -172,7 +173,6 @@ export default function OrdenistaDashboard({
             ))}
           </div>
 
-          {/* Membros prontos para promover */}
           <p style={{ fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', color: '#c8a96e', marginBottom: '12px' }}>
             Prontos para Promoção
           </p>
@@ -215,7 +215,7 @@ export default function OrdenistaDashboard({
                 <span style={{ fontSize: '11px', color: '#7a7060' }}>({lista.length})</span>
               </div>
               {lista.length === 0 ? (
-                <p style={{ color: '#7a7060', fontSize: '13px', padding: '12px 0' }}>Nenhum {label.toLowerCase().slice(0,-1)} ainda.</p>
+                <p style={{ color: '#7a7060', fontSize: '13px', padding: '12px 0' }}>Nenhum ainda.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {lista.map(p => {
@@ -228,7 +228,7 @@ export default function OrdenistaDashboard({
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <p style={{ color: '#f5f0e8', fontSize: '13px', fontWeight: '500' }}>{p.nome}</p>
-                          <p style={{ color: '#7a7060', fontSize: '11px' }}>{p.email} · {new Date(p.created_at).toLocaleDateString('pt-BR')}</p>
+                          <p style={{ color: '#7a7060', fontSize: '11px' }}>{p.email}</p>
                         </div>
                         {role === 'membro' && (
                           <span style={{ fontSize: '11px', color: aprovados === 4 ? '#d4a843' : '#7a7060' }}>
@@ -273,7 +273,7 @@ export default function OrdenistaDashboard({
                     </span>
                   </div>
                   <p style={{ color: '#7a7060', fontSize: '12px' }}>
-                    Responsável: {turma.responsavel?.nome ?? '—'} ({ROLES_LABEL[turma.responsavel?.role ?? ''] ?? '—'}) · {turma.membros_turma?.length ?? 0} membros
+                    Responsável: {turma.responsavel?.nome ?? '—'} · {turma.membros_turma?.length ?? 0} membros
                   </p>
                 </div>
                 <p style={{ color: '#7a7060', fontSize: '11px' }}>{new Date(turma.created_at).toLocaleDateString('pt-BR')}</p>
@@ -296,7 +296,6 @@ export default function OrdenistaDashboard({
             </button>
           </div>
 
-          {/* Modal emitir certificado */}
           {showEmitir && (
             <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{ background: '#1a1713', border: '1px solid rgba(212,168,67,0.2)', borderRadius: '8px', padding: '32px', width: '100%', maxWidth: '440px' }}>
@@ -354,7 +353,6 @@ export default function OrdenistaDashboard({
             </div>
           )}
 
-          {/* Lista de certificados */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {certificados.length === 0 ? (
               <div className="card" style={{ textAlign: 'center', padding: '32px' }}>
@@ -369,21 +367,20 @@ export default function OrdenistaDashboard({
                 <div style={{ flex: 1 }}>
                   <p style={{ color: '#f5f0e8', fontSize: '13px', fontWeight: '500' }}>{cert.membro?.nome}</p>
                   <p style={{ color: '#7a7060', fontSize: '11px' }}>
-                    {cert.tipo?.replace(/_/g, ' ')} · Código: {cert.codigo_unico} · {new Date(cert.data_emissao).toLocaleDateString('pt-BR')}
+                    {cert.tipo?.replace(/_/g, ' ')} · {cert.codigo_unico} · {new Date(cert.data_emissao).toLocaleDateString('pt-BR')}
                   </p>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <p style={{ fontSize: '11px', color: '#7a7060' }}>por {cert.emissor?.nome}</p>
-                
-                  href={`/api/ordenista/certificado/${cert.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={e => e.stopPropagation()}
-                  style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 8px', borderRadius: '4px', background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.2)', color: '#d4a843', fontSize: '11px', textDecoration: 'none' }}
-                >
-                  <Download size={11} /> PDF
-                </a>
-              </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                  <p style={{ fontSize: '11px', color: '#7a7060' }}>por {cert.emissor?.nome}</p>
+                  <a
+                    href={`/api/ordenista/certificado/${cert.id}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 8px', borderRadius: '4px', background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.2)', color: '#d4a843', fontSize: '11px', textDecoration: 'none' }}
+                  >
+                    <Download size={11} /> PDF
+                  </a>
+                </div>
               </div>
             ))}
           </div>
