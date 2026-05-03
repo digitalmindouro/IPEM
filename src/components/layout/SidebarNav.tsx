@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from 'react'
 import {
   BookOpen, Users, CheckSquare, Award,
   BarChart2, Settings, LogOut, Flame,
-  ChevronRight, Bell, X,
+  ChevronRight, Bell, X, DollarSign,
 } from 'lucide-react'
 
 interface NavItem {
@@ -29,6 +29,7 @@ interface Notificacao {
 function getNavItems(role: Profile['role']): NavItem[] {
   const items: NavItem[] = [
     { href: '/membro', label: 'Meus Cadernos', icon: BookOpen },
+    { href: '/financeiro', label: 'Financeiro', icon: DollarSign },
   ]
   if (['facilitador', 'mentor', 'guardiao', 'ordenista'].includes(role)) {
     items.push({ href: '/facilitador', label: 'Minha Turma', icon: Users })
@@ -40,6 +41,9 @@ function getNavItems(role: Profile['role']): NavItem[] {
   }
   if (['guardiao', 'ordenista'].includes(role)) {
     items.push({ href: '/guardiao', label: 'Guardiões', icon: Award })
+  }
+  if (['facilitador', 'mentor', 'guardiao', 'ordenista'].includes(role)) {
+    items.push({ href: '/financeiro', label: 'Financeiro', icon: DollarSign })
   }
   if (role === 'ordenista') {
     items.push({ href: '/ordenista', label: 'Painel Ordenista', icon: Settings })
