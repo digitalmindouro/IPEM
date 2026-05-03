@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { Plus, Users, ChevronRight, X, Loader2, Search, Trash2 } from 'lucide-react'
+import { Plus, Users, ChevronRight, X, Loader2, Search, Trash2, Award } from 'lucide-react'
 
 interface Profile {
   id: string
@@ -59,12 +59,7 @@ function ProgressoCadernos({ membroId, questionarios }: { membroId: string; ques
         else if (status === 'aguardando_aprovacao') { bg = 'rgba(200,169,110,0.15)'; color = '#c8a96e'; icon = '…' }
         else if (status === 'em_andamento') { bg = 'rgba(255,255,255,0.08)'; color = '#f5f0e8' }
         return (
-          <div key={num} style={{
-            width: '28px', height: '28px', borderRadius: '4px',
-            background: bg, color, fontSize: '11px', fontWeight: '600',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'Playfair Display, serif',
-          }}>
+          <div key={num} style={{ width: '28px', height: '28px', borderRadius: '4px', background: bg, color, fontSize: '11px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Playfair Display, serif' }}>
             {icon}
           </div>
         )
@@ -105,11 +100,7 @@ export default function MentorDashboard({ profile, turmas: turmasIniciais, quest
         toast.success('Turma criada!')
         setTurmas(prev => [{ ...data.turma, membros_turma: [] }, ...prev])
         setShowCriarTurma(false)
-        setNomeTurma('')
-        setDataInicio('')
-        setDataFim('')
-        setMaxMembros('')
-        setObsTurma('')
+        setNomeTurma(''); setDataInicio(''); setDataFim(''); setMaxMembros(''); setObsTurma('')
       } else toast.error(data.error || 'Erro ao criar turma.')
     } catch { toast.error('Erro de conexão.') }
     finally { setCriando(false) }
@@ -160,6 +151,20 @@ export default function MentorDashboard({ profile, turmas: turmasIniciais, quest
     } else toast.error('Erro ao remover.')
   }
 
+  async function emitirCertificado(membroId: string) {
+    if (!confirm('Emitir certificado de conclusão I.P.E.M para este membro?')) return
+    try {
+      const res = await fetch('/api/ordenista/certificado', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ membro_id: membroId, tipo: 'conclusao_ipem' }),
+      })
+      const data = await res.json()
+      if (res.ok) toast.success(`Certificado emitido! Código: ${data.certificado.codigo_unico}`)
+      else toast.error(data.error || 'Erro ao emitir certificado.')
+    } catch { toast.error('Erro de conexão.') }
+  }
+
   const membrosDaTurma = turmaSelecionada?.membros_turma.map(m => m.membro_id) ?? []
   const membrosFiltrados = todosProfiles.filter(p =>
     !membrosDaTurma.includes(p.id) &&
@@ -182,7 +187,6 @@ export default function MentorDashboard({ profile, turmas: turmasIniciais, quest
         </button>
       </div>
 
-      {/* Modal Criar Turma */}
       {showCriarTurma && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ background: '#1a1713', border: '1px solid rgba(212,168,67,0.2)', borderRadius: '8px', padding: '32px', width: '100%', maxWidth: '480px' }}>
@@ -191,10 +195,7 @@ export default function MentorDashboard({ profile, turmas: turmasIniciais, quest
               <button onClick={() => setShowCriarTurma(false)} style={{ background: 'none', border: 'none', color: '#7a7060', cursor: 'pointer' }}><X size={18} /></button>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div>
-                <label style={labelStyle}>Nome da turma *</label>
-                <input value={nomeTurma} onChange={e => setNomeTurma(e.target.value)} style={inputStyle} placeholder={nomeDefault} />
-              </div>
+              <div><label style={labelStyle}>Nome da turma *</label><input value={nomeTurma} onChange={e => setNomeTurma(e.target.value)} style={inputStyle} placeholder={nomeDefault} /></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div><label style={labelStyle}>Data início</label><input type="date" value={dataInicio} onChange={e => setDataInicio(e.target.value)} style={inputStyle} /></div>
                 <div><label style={labelStyle}>Data fim</label><input type="date" value={dataFim} onChange={e => setDataFim(e.target.value)} style={inputStyle} /></div>
@@ -227,10 +228,7 @@ export default function MentorDashboard({ profile, turmas: turmasIniciais, quest
                 </div>
                 <div style={{ flex: 1 }}>
                   <p style={{ color: '#f5f0e8', fontSize: '15px', fontWeight: '500', marginBottom: '4px' }}>{turma.nome}</p>
-                  <p style={{ color: '#7a7060', fontSize: '12px' }}>
-                    {turma.membros_turma?.length ?? 0} {turma.membros_turma?.length === 1 ? 'membro' : 'membros'}
-                    {turma.data_inicio && ` · Início: ${new Date(turma.data_inicio).toLocaleDateString('pt-BR')}`}
-                  </p>
+                  <p style={{ color: '#7a7060', fontSize: '12px' }}>{turma.membros_turma?.length ?? 0} {turma.membros_turma?.length === 1 ? 'membro' : 'membros'}{turma.data_inicio && ` · Início: ${new Date(turma.data_inicio).toLocaleDateString('pt-BR')}`}</p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <button onClick={e => { e.stopPropagation(); excluirTurma(turma.id) }} style={{ background: 'none', border: 'none', color: '#7a7060', cursor: 'pointer', padding: '6px', borderRadius: '4px' }}>
@@ -250,11 +248,7 @@ export default function MentorDashboard({ profile, turmas: turmasIniciais, quest
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px' }}>
             <div>
               <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', color: '#f5f0e8', marginBottom: '4px' }}>{turmaSelecionada.nome}</h2>
-              <p style={{ color: '#7a7060', fontSize: '13px' }}>
-                {turmaSelecionada.membros_turma.length} membros
-                {turmaSelecionada.data_inicio && ` · ${new Date(turmaSelecionada.data_inicio).toLocaleDateString('pt-BR')}`}
-                {turmaSelecionada.data_fim && ` → ${new Date(turmaSelecionada.data_fim).toLocaleDateString('pt-BR')}`}
-              </p>
+              <p style={{ color: '#7a7060', fontSize: '13px' }}>{turmaSelecionada.membros_turma.length} membros{turmaSelecionada.data_inicio && ` · ${new Date(turmaSelecionada.data_inicio).toLocaleDateString('pt-BR')}`}{turmaSelecionada.data_fim && ` → ${new Date(turmaSelecionada.data_fim).toLocaleDateString('pt-BR')}`}</p>
             </div>
             <button onClick={() => setShowAdicionarMembro(true)} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', background: 'linear-gradient(135deg, #c8a96e 0%, #d4a843 100%)', border: 'none', color: '#1a1713', fontSize: '12px', fontWeight: '500' }}>
               <Plus size={13} /> Adicionar membro
@@ -274,9 +268,7 @@ export default function MentorDashboard({ profile, turmas: turmasIniciais, quest
                 </div>
                 <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   {membrosFiltrados.length === 0 ? (
-                    <p style={{ color: '#7a7060', fontSize: '13px', textAlign: 'center', padding: '20px' }}>
-                      {buscaMembro ? 'Nenhum resultado.' : 'Todos os membros já estão na turma.'}
-                    </p>
+                    <p style={{ color: '#7a7060', fontSize: '13px', textAlign: 'center', padding: '20px' }}>{buscaMembro ? 'Nenhum resultado.' : 'Todos os membros já estão na turma.'}</p>
                   ) : membrosFiltrados.map(p => (
                     <button key={p.id} onClick={() => adicionarMembro(p.id)} disabled={adicionando} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', borderRadius: '4px', cursor: 'pointer', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', textAlign: 'left', color: '#f5f0e8' }}>
                       <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(212,168,67,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4a843', fontSize: '13px', fontWeight: '600', flexShrink: 0 }}>
@@ -298,20 +290,35 @@ export default function MentorDashboard({ profile, turmas: turmasIniciais, quest
               <div className="card" style={{ textAlign: 'center', padding: '32px' }}>
                 <p style={{ color: '#7a7060', fontSize: '13px' }}>Nenhum membro nesta turma ainda.</p>
               </div>
-            ) : turmaSelecionada.membros_turma.map(mt => (
-              <div key={mt.id} className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(212,168,67,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4a843', fontSize: '14px', fontWeight: '600', flexShrink: 0 }}>
-                  {mt.membro?.nome?.charAt(0).toUpperCase()}
+            ) : turmaSelecionada.membros_turma.map(mt => {
+              const totalAprovados = questionarios.filter(q => q.membro_id === mt.membro_id && q.status === 'aprovado').length
+              const concluiu = totalAprovados === 4
+              return (
+                <div key={mt.id} className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(212,168,67,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d4a843', fontSize: '14px', fontWeight: '600', flexShrink: 0 }}>
+                    {mt.membro?.nome?.charAt(0).toUpperCase()}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ color: '#f5f0e8', fontSize: '13px', fontWeight: '500', marginBottom: '6px' }}>{mt.membro?.nome}</p>
+                    <ProgressoCadernos membroId={mt.membro_id} questionarios={questionarios} />
+                  </div>
+                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
+                    {concluiu && (
+                      <button
+                        onClick={() => emitirCertificado(mt.membro_id)}
+                        title="Emitir certificado de conclusão"
+                        style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '5px 10px', borderRadius: '4px', background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.25)', color: '#d4a843', fontSize: '11px', cursor: 'pointer' }}
+                      >
+                        <Award size={12} /> Certificado
+                      </button>
+                    )}
+                    <button onClick={() => removerMembro(mt.membro_id)} style={{ background: 'none', border: 'none', color: '#7a7060', cursor: 'pointer', padding: '4px' }}>
+                      <X size={14} />
+                    </button>
+                  </div>
                 </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ color: '#f5f0e8', fontSize: '13px', fontWeight: '500', marginBottom: '6px' }}>{mt.membro?.nome}</p>
-                  <ProgressoCadernos membroId={mt.membro_id} questionarios={questionarios} />
-                </div>
-                <button onClick={() => removerMembro(mt.membro_id)} style={{ background: 'none', border: 'none', color: '#7a7060', cursor: 'pointer', padding: '4px', flexShrink: 0 }}>
-                  <X size={14} />
-                </button>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
