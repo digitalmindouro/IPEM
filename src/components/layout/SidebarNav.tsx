@@ -29,6 +29,7 @@ interface Notificacao {
 function getNavItems(role: Profile['role']): NavItem[] {
   const items: NavItem[] = [
     { href: '/membro', label: 'Meus Cadernos', icon: BookOpen },
+    { href: '/mentor/formacao', label: 'Formação', icon: Award },
   ]
   if (['facilitador', 'mentor', 'guardiao', 'ordenista'].includes(role)) {
     items.push({ href: '/facilitador', label: 'Facilitador', icon: Users })
