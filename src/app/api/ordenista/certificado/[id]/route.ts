@@ -149,8 +149,9 @@ export async function GET(
     page.drawText(rodape, { x: width / 2 - wRodape / 2, y: 33, size: 7, font: fontNormal, color: CINZA })
 
     const pdfBytes = await doc.save()
+    const buffer = Buffer.from(pdfBytes)
 
-    return new NextResponse(pdfBytes, {
+    return new NextResponse(buffer, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="certificado-${codigo}.pdf"`,

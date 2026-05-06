@@ -38,9 +38,9 @@ export default function CadernoViewer({ numero, questionarioId, respostasIniciai
           const sliders = doc.querySelectorAll('input[type="range"]')
           inputs.forEach((el, i) => { if (!el.id) el.id = `inp_${i}` })
           textareas.forEach((el, i) => { if (!el.id) el.id = `ta_${i}` })
-          inputs.forEach(el => { const v = respostasIniciais[el.id]; if (v !== undefined) el.value = String(v) })
-          textareas.forEach(el => { const v = respostasIniciais[el.id]; if (v !== undefined) el.value = String(v) })
-          sliders.forEach((el, i) => { const v = respostasIniciais[`slider_${i}`]; if (v !== undefined) { el.value = String(v); el.dispatchEvent(new Event('input', { bubbles: true })) } })
+          inputs.forEach(el => { const v = respostasIniciais[el.id]; if (v !== undefined) (el as HTMLInputElement).value = String(v) })
+          textareas.forEach(el => { const v = respostasIniciais[el.id]; if (v !== undefined) (el as HTMLTextAreaElement).value = String(v) })
+          sliders.forEach((el, i) => { const v = respostasIniciais[`slider_${i}`]; if (v !== undefined) { (el as HTMLInputElement).value = String(v); el.dispatchEvent(new Event('input', { bubbles: true })) } })
           doc.querySelectorAll('*').forEach(el => {
             const text = el.textContent?.toLowerCase() ?? ''
             if ((text.includes('validação') || text.includes('validacao') || text.includes('facilitador')) && el.children.length === 0) {
@@ -52,7 +52,7 @@ export default function CadernoViewer({ numero, questionarioId, respostasIniciai
             }
           })
           if (isReadOnly) {
-            doc.querySelectorAll('input, textarea').forEach(el => { el.disabled = true; el.style.opacity = '0.7' })
+            doc.querySelectorAll('input, textarea').forEach(el => { (el as HTMLInputElement).disabled = true; (el as HTMLElement).style.opacity = '0.7' })
           }
         }, 400)
       } catch (e) { console.error('Erro iframe:', e) }
